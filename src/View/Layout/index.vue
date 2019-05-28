@@ -37,13 +37,19 @@
           </div>
 
           <!-- 右上角的个人中心 -->
-          <div style="position:absolute; right:0px; top:0px;">
+          <div style="position:absolute; right: -30px;">
             <MenuItem name="6" v-show="isLogin === false">
-              <Button type="text" style="color: aliceblue" @click="loginBtnClick">
+              <Button style="color: aliceblue" @click="loginBtnClick">
                 <Mallki text="登录"></Mallki>
               </Button>
-              <Button type="text" style="color: aliceblue" @click="registerBtnClick">
+              <Button style="color: aliceblue" @click="registerBtnClick">
                 <Mallki text="注册"></Mallki>
+              </Button>
+            </MenuItem>
+
+            <MenuItem name="7" v-show="isAdmin === true">
+              <Button style="color: aliceblue" @click="loginBtnClick">
+                <Mallki text="管理控制台"></Mallki>
               </Button>
             </MenuItem>
 
@@ -71,6 +77,7 @@
 
       <Footer class="layout-footer-center">2019 &copy; XPU VAE Boys Team</Footer>
     </Layout>
+
   </div>
 </template>
 
@@ -80,6 +87,13 @@
   export default {
     name: "index",
     components: {Mallki},
+    data() {
+      return {
+        isLogin: false, // 是否已登录
+        isAdmin: false, // 是否管理员
+        userData: null, // 用户信息
+      }
+    },
     mounted() {
       this.$Loading.start(); // 进度条开始
       if (localStorage.getItem('userData') === null) {
@@ -90,15 +104,9 @@
       }
       this.$Loading.finish(); // 进度条结束
     },
-    data() {
-      return {
-        isLogin: false, // 是否已登录
-        userData: null, // 用户信息
-      }
-    },
     methods: {
       loginBtnClick() {
-        this.$Message.info('登录功能尚未开放！敬请期待！');
+        this.$router.push('/Login');  // 跳转到 Login 界面
       },
       registerBtnClick() {
         this.$Message.info('注册功能尚未开放！敬请期待！');
