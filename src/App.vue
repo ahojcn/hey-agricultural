@@ -1,23 +1,29 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+  export default {
+    name: 'App',
+    mounted() {
+
+      // 欢迎信息
+      this.$Message.success('欢迎，这里是智慧农业平台.');
+
+      // 配置全局的 message
+      this.$Message.config({
+        top: 200, // 和顶部距离
+        duration: 5 // 显示时长
+      });
+
+    },
+    beforeDestroy() { // vm实例销毁前，执行一些处理操作
+      localStorage.clear(); // 清空本地所有的缓存
+    }
+  }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
