@@ -1,7 +1,9 @@
 <template>
-  <div style="margin-left: 43%">
-    <img src="@/assets/logo.png" alt="logo">
+  <div style="margin-left: 43%; margin-top: 50px">
+    <Logo></Logo>
 
+    <br/>
+    <br/>
     <h1 style="margin-left: 5px">
       <Mallki text="智慧农业平台-登录"></Mallki>
     </h1>
@@ -27,10 +29,11 @@
 
 <script>
   import Mallki from "@/components/Mallki";
+  import Logo from "@/components/Logo";
 
   export default {
     name: "Login",
-    components: {Mallki},
+    components: {Logo, Mallki},
     data() {
       return {
         loginData: {
@@ -55,9 +58,13 @@
           return;
         }
 
+        localStorage.setItem('userData', JSON.stringify(this.loginData));
         // TODO: 登录验证
         this.$router.push('/');
       }
+    },
+    mounted() {
+      this.animate = true;
     }
   }
 </script>

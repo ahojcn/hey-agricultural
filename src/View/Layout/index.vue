@@ -4,7 +4,7 @@
       <Header :style="{position: 'fixed', width: '100%'}">
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo">
-            <img src="@/assets/logo.png" style="width: 50%" alt="logo"/>
+            <img src="@/assets/logo.png"  alt="logo" style="width: 50%;"/>
           </div>
 
           <div class="layout-nav">
@@ -37,13 +37,18 @@
           </div>
 
           <!-- 右上角的个人中心 -->
-          <div style="position:absolute; right: -30px;">
-            <MenuItem name="6" v-show="isLogin === false">
-              <Button style="color: aliceblue" @click="loginBtnClick">
-                <Mallki text="登录"></Mallki>
+          <div style="position:absolute; right: -20px;">
+            <MenuItem name="6" v-if="isLogin === false">
+              <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
+              <Button type="text" style="color: aliceblue" @click="loginBtnClick" ghost>
+                <h2>
+                  <Mallki text="登录"></Mallki>
+                </h2>
               </Button>
-              <Button style="color: aliceblue" @click="registerBtnClick">
-                <Mallki text="注册"></Mallki>
+              <Button type="text" style="color: aliceblue" @click="registerBtnClick" ghost>
+                <h2>
+                  <Mallki text="注册"></Mallki>
+                </h2>
               </Button>
             </MenuItem>
 
@@ -72,7 +77,7 @@
       </Header>
 
       <Content :style="{margin: '88px 20px 0', background: '#f5f7f9', minHeight: '1000px'}">
-        <router-view></router-view>
+        <router-view v-if="animate" class="animated"></router-view>
       </Content>
 
       <Footer class="layout-footer-center">2019 &copy; XPU VAE Boys Team</Footer>
@@ -83,18 +88,23 @@
 
 <script>
   import Mallki from "@/components/Mallki";
+  import Logo from "@/components/Logo";
 
   export default {
     name: "index",
-    components: {Mallki},
+    components: {Logo, Mallki},
     data() {
       return {
+        animate: false, // 动画控制
         isLogin: false, // 是否已登录
         isAdmin: false, // 是否管理员
         userData: null, // 用户信息
       }
     },
     mounted() {
+      this.animate = true;
+      this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
+
       this.$Loading.start(); // 进度条开始
       if (localStorage.getItem('userData') === null) {
         localStorage.setItem('isLogin', false);
@@ -103,6 +113,7 @@
         localStorage.setItem('isLogin', true);
       }
       this.$Loading.finish(); // 进度条结束
+
     },
     methods: {
       loginBtnClick() {
@@ -146,9 +157,9 @@
 
   .layout-nav {
     width: 100%;
-    margin: 0 auto;
+    margin: auto;
     margin-right: 20px;
-    margin-left: 400px;
+    margin-left: 370px;
   }
 
   .layout-footer-center {

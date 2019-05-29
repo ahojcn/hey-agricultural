@@ -1,13 +1,22 @@
 <template>
   <div id="app">
-    <router-view/>
+
+    <router-view></router-view>
+
   </div>
 </template>
 
 <script>
   export default {
     name: 'App',
+    data() {
+      return {
+        animate: false, // 动画控制
+      }
+    },
     mounted() {
+
+      this.animate = true;
 
       // 欢迎信息
       this.$Message.success('欢迎，这里是智慧农业平台.');
