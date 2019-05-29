@@ -4,7 +4,7 @@
       <Header :style="{position: 'fixed', width: '100%'}">
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo">
-            <img src="@/assets/logo.png"  alt="logo" style="width: 50%;"/>
+            <img src="@/assets/logo.png" alt="logo" style="width: 50%;"/>
           </div>
 
           <div class="layout-nav">
@@ -38,14 +38,16 @@
 
           <!-- 右上角的个人中心 -->
           <div style="position:absolute; right: -20px;">
-            <MenuItem name="6" v-if="isLogin === false">
+            <MenuItem name="6" v-if="isLogin === false || isLogin === null">
               <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
-              <Button type="text" style="color: aliceblue" @click="loginBtnClick" ghost>
-                <h2>
-                  <Mallki text="登录"></Mallki>
-                </h2>
-              </Button>
-              <Button type="text" style="color: aliceblue" @click="registerBtnClick" ghost>
+              <router-link to="Login">
+                <Button type="text" style="color: aliceblue" ghost>
+                  <h2>
+                    <Mallki text="登录"></Mallki>
+                  </h2>
+                </Button>
+              </router-link>
+              <Button type="text" style="color: aliceblue" ghost>
                 <h2>
                   <Mallki text="注册"></Mallki>
                 </h2>
@@ -53,13 +55,13 @@
             </MenuItem>
 
             <MenuItem name="7" v-show="isAdmin === true">
-              <Button style="color: aliceblue" @click="loginBtnClick">
+              <Button style="color: aliceblue">
                 <Mallki text="管理控制台"></Mallki>
               </Button>
             </MenuItem>
 
             <!-- 已经登录 -->
-            <Dropdown v-show="isLogin === true">
+            <Dropdown v-show="isLogin === true" @on-click="loginOut">
               <a href="javascript:void(0)">
                 <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
                 个人中心
@@ -69,7 +71,7 @@
                 <DropdownItem>炸酱面</DropdownItem>
                 <DropdownItem>豆汁儿</DropdownItem>
                 <DropdownItem>冰糖葫芦</DropdownItem>
-                <DropdownItem>北京烤鸭</DropdownItem>
+                <DropdownItem name="loginOut" divided>退出登录</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -77,7 +79,9 @@
       </Header>
 
       <Content :style="{margin: '88px 20px 0', background: '#f5f7f9', minHeight: '1000px'}">
-        <router-view v-if="animate" class="animated"></router-view>
+        <transition enter-active-class="fadeInDown" mode="out-in" translate="yes" leave-active-class="fadeOutUp">
+          <router-view v-if="animate" class="animated"></router-view>
+        </transition>
       </Content>
 
       <Footer class="layout-footer-center">2019 &copy; XPU VAE Boys Team</Footer>
@@ -102,27 +106,39 @@
       }
     },
     mounted() {
+      this.$Loading.start(); // 进度条开始
+
       this.animate = true;
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
 
-      this.$Loading.start(); // 进度条开始
       if (localStorage.getItem('userData') === null) {
         localStorage.setItem('isLogin', false);
         this.$Message.info('未登录');
       } else {
         localStorage.setItem('isLogin', true);
       }
-      this.$Loading.finish(); // 进度条结束
 
+      this.$Loading.finish(); // 进度条结束
     },
     methods: {
-      loginBtnClick() {
-        this.$router.push('/Login');  // 跳转到 Login 界面
-      },
-      registerBtnClick() {
-        this.$Message.info('注册功能尚未开放！敬请期待！');
-      },
-    }
+      // loginBtnClick() {
+      //   this.$router.push('/Login');  // 跳转到 Login 界面
+      // },
+      // registerBtnClick() {
+      //   this.$Message.info('注册功能尚未开放！敬请期待！');
+      // },
+
+      loginOut(name) {
+        console.log(name);
+        localStorage.clear();
+        this.$Message.success('退出成功');
+
+        setTimeout(function () {
+          // this.$router.go(0);
+          location.reload();
+        }, 2000);
+      }
+    },
   }
 </script>
 
@@ -141,7 +157,7 @@
     background: #f5f7f9;
     position: relative;
     border-radius: 4px;
-    overflow: hidden;
+    overflow: scroll;
   }
 
   .layout-logo {
@@ -157,9 +173,9 @@
 
   .layout-nav {
     width: 100%;
-    margin: auto;
+    margin: 0 auto;
     margin-right: 20px;
-    margin-left: 370px;
+    /*margin-left: 370px;*/
   }
 
   .layout-footer-center {

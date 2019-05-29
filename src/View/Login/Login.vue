@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left: 43%; margin-top: 50px">
+  <div style="margin-left: 41%; margin-top: 50px">
     <Logo></Logo>
 
     <br/>
@@ -60,6 +60,8 @@
 
         localStorage.setItem('userData', JSON.stringify(this.loginData));
         // TODO: 登录验证
+        localStorage.setItem('isLogin', 'true');
+        localStorage.setItem('refresh', '1');
         this.$router.push('/');
       }
     },

@@ -17,6 +17,12 @@
     data() {
       return {
       }
+    },
+    mounted() {
+      if (localStorage.getItem('isLogin') === 'true' && localStorage.getItem('refresh') === '1') {
+        localStorage.setItem('refresh', '0');
+        this.$router.go(0);
+      }
     }
   }
 </script>

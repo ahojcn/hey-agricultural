@@ -20,12 +20,12 @@ export default new Router({
           name: 'HelloWorld',
           component: HelloWorld,
         },
+        {
+          path: '/Login',
+          name: 'Login',
+          component: Login,
+        }
       ]
     },
-    {
-      path: '/Login',
-      name: 'Login',
-      component: Login,
-    }
   ]
 })
