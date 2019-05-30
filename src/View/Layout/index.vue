@@ -61,7 +61,7 @@
             </MenuItem>
 
             <!-- 已经登录 -->
-            <Dropdown v-show="isLogin === true" @on-click="loginOut">
+            <Dropdown v-show="isLogin === true" @on-click="handleClick">
               <a href="javascript:void(0)">
                 <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
                 个人中心
@@ -71,7 +71,7 @@
                 <DropdownItem>炸酱面</DropdownItem>
                 <DropdownItem>豆汁儿</DropdownItem>
                 <DropdownItem>冰糖葫芦</DropdownItem>
-                <DropdownItem name="loginOut" divided>退出登录</DropdownItem>
+                <DropdownItem name="logout" divided>退出登录</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -121,22 +121,27 @@
       this.$Loading.finish(); // 进度条结束
     },
     methods: {
-      // loginBtnClick() {
-      //   this.$router.push('/Login');  // 跳转到 Login 界面
-      // },
-      // registerBtnClick() {
-      //   this.$Message.info('注册功能尚未开放！敬请期待！');
-      // },
 
-      loginOut(name) {
-        console.log(name);
-        localStorage.clear();
-        this.$Message.success('退出成功');
+      // 退出登录
+      handleClick(name) {
+        if (name === 'logout') {
+          this.$http.post('user/logout', {}).then(res => {
+            console.log(res);
+          }, () => { // 异常
+            this.$Loading.error();
+            this.$Message.error('服务器异常');
+          });
 
-        setTimeout(function () {
-          // this.$router.go(0);
-          location.reload();
-        }, 2000);
+          console.log(name);
+          localStorage.clear();
+          sessionStorage.clear();
+          this.$Message.success('退出登录');
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
+        } else {
+          // 处理其他点击事件
+        }
       }
     },
   }

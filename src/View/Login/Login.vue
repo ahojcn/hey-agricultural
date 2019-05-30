@@ -79,6 +79,9 @@
             this.$Message.error(res.body.msg);
             this.$Loading.error();
           }
+        }, () => { // 异常
+          this.$Loading.error();
+          this.$Message.error('服务器异常');
         })
       }
     },
