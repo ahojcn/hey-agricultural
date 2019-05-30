@@ -4,7 +4,7 @@
       <Header :style="{position: 'absolute', width: '100%'}">
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo">
-            <img src="@/assets/logo.png" alt="logo" style="width: 50%;"/>
+            <img src="@/assets/logo.png" alt="logo" style="width: 50%;" onclick="location.reload()"/>
           </div>
 
           <div class="layout-nav">
@@ -15,22 +15,22 @@
               </MenuItem>
             </router-link>
 
-            <MenuItem name="2">
+            <MenuItem name="2" to="/Relaxation">
               <Icon type="md-cafe"/>
               休闲娱乐
             </MenuItem>
 
-            <MenuItem name="3">
+            <MenuItem name="3" to="/Support">
               <Icon type="ios-build"/>
               技术帮扶
             </MenuItem>
 
-            <MenuItem name="4">
+            <MenuItem name="4" to="/Practice">
               <Icon type="ios-egg"/>
               实践基地
             </MenuItem>
 
-            <MenuItem name="5">
+            <MenuItem name="5" to="/Business">
               <Icon type="md-thumbs-up"/>
               商业合作
             </MenuItem>
@@ -40,14 +40,12 @@
           <div style="position:absolute; right: -20px;">
             <MenuItem name="6" v-if="isLogin === false || isLogin === null">
               <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
-              <router-link to="Login">
-                <Button type="text" style="color: aliceblue" ghost>
-                  <h2>
-                    <Mallki text="登录"></Mallki>
-                  </h2>
-                </Button>
-              </router-link>
-              <Button type="text" style="color: aliceblue" ghost>
+              <Button type="text" style="color: aliceblue" ghost to="Login">
+                <h2>
+                  <Mallki text="登录"></Mallki>
+                </h2>
+              </Button>
+              <Button type="text" style="color: aliceblue" ghost to="Regist">
                 <h2>
                   <Mallki text="注册"></Mallki>
                 </h2>

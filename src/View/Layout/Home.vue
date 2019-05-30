@@ -1,11 +1,10 @@
 <template>
-  <div style="margin-left: 50px">
-    <Top></Top>
+  <div>
+
     <Row>
       <Col span="6">
         <Card title="农产品采销" :padding="0" shadow style="width: 300px;">
           <CellGroup>
-
             <Cell title="水果" label="今日两件特惠！" to="Fruit">
               <Icon type="logo-apple" slot="icon"/>
             </Cell>
@@ -23,6 +22,8 @@
               <Icon type="logo-freebsd-devil" slot="icon"/>
             </Cell>
           </CellGroup>
+
+          <Top></Top>
         </Card>
       </Col>
       <Col span="18">

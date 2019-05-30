@@ -31,6 +31,7 @@
   import Mallki from "@/components/Mallki";
   import Logo from "@/components/Logo";
 
+
   export default {
     name: "Login",
     components: {Logo, Mallki},
@@ -48,7 +49,7 @@
             {required: true, message: '请输入密码', trigger: 'blur'},
             {type: 'string', min: 3, message: '密码长度不能小于 6', trigger: 'blur'}
           ]
-        }
+        },
       }
     },
     methods: {
@@ -60,8 +61,7 @@
           return;
         }
 
-        // localStorage.setItem('userData', JSON.stringify(this.loginData));
-        // TODO: 登录验证
+        // TODO 管理登录验证
         this.$http.post('user/login', {
           userId: this.loginData.username,
           userPassword: this.loginData.password
