@@ -16,13 +16,22 @@
     name: 'HelloWorld',
     data() {
       return {
+        userData: null,
       }
     },
     mounted() {
+      this.$Loading.start();
       if (localStorage.getItem('isLogin') === 'true' && localStorage.getItem('refresh') === '1') {
         localStorage.setItem('refresh', '0');
         this.$router.go(0);
       }
+
+      this.userData = JSON.parse(localStorage.getItem('userData'));
+      if (this.userData !== null) {
+        this.$Message.success('你好，' + this.userData.userName);
+      }
+
+      this.$Loading.finish();
     }
   }
 </script>
