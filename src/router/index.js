@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/View/Layout/HelloWorld'
+import Home from '@/View/Layout/Home' // Home
+import Fruit from '@/View/Layout/Home/Fruit' // 水果
 
 import index from '@/View/Layout/index' // 首页
 
@@ -17,8 +18,15 @@ export default new Router({
       children: [
         {
           path: '/',
-          name: 'HelloWorld',
-          component: HelloWorld,
+          name: 'Home',
+          component: Home,
+          children: [
+            {
+              path: '/Fruit',
+              name: 'Fruit',
+              component: Fruit,
+            }
+          ],
         },
         {
           path: '/Login',

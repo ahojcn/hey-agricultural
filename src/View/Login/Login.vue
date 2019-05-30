@@ -66,7 +66,6 @@
           userId: this.loginData.username,
           userPassword: this.loginData.password
         }).then(res => {
-          console.log(res);
           if (res.body.code === 0) {
             this.$Message.success('登录成功');
             localStorage.setItem('userData', JSON.stringify(res.body.data));

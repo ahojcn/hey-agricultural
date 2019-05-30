@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Layout>
-      <Header :style="{position: 'fixed', width: '100%'}">
+      <Header :style="{position: 'absolute', width: '100%'}">
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo">
             <img src="@/assets/logo.png" alt="logo" style="width: 50%;"/>
@@ -67,10 +67,10 @@
                 个人中心
               </a>
               <DropdownMenu slot="list">
-                <DropdownItem>驴打滚</DropdownItem>
-                <DropdownItem>炸酱面</DropdownItem>
-                <DropdownItem>豆汁儿</DropdownItem>
-                <DropdownItem>冰糖葫芦</DropdownItem>
+                <DropdownItem>1</DropdownItem>
+                <DropdownItem>2</DropdownItem>
+                <DropdownItem>3</DropdownItem>
+                <DropdownItem>4</DropdownItem>
                 <DropdownItem name="logout" divided>退出登录</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -79,10 +79,13 @@
       </Header>
 
       <Content :style="{margin: '88px 20px 0', background: '#f5f7f9', minHeight: '1000px'}">
-        <transition enter-active-class="fadeInDown" mode="out-in" translate="yes" leave-active-class="fadeOutUp">
+        <transition enter-active-class="fadeIn" mode="out-in" translate="yes" leave-active-class="fadeOut">
           <router-view v-if="animate" class="animated"></router-view>
         </transition>
       </Content>
+
+      <!-- 回到顶部开关 -->
+      <BackTop></BackTop>
 
       <Footer class="layout-footer-center">2019 &copy; XPU VAE Boys Team</Footer>
     </Layout>
@@ -126,13 +129,13 @@
       handleClick(name) {
         if (name === 'logout') {
           this.$http.post('user/logout', {}).then(res => {
-            console.log(res);
+            // console.log(res);
+            console.log('logout');
           }, () => { // 异常
             this.$Loading.error();
             this.$Message.error('服务器异常');
           });
 
-          console.log(name);
           localStorage.clear();
           sessionStorage.clear();
           this.$Message.success('退出登录');
@@ -180,6 +183,7 @@
     width: 100%;
     margin: 0 auto;
     margin-right: 20px;
+    z-index: auto;
     /*margin-left: 370px;*/
   }
 
