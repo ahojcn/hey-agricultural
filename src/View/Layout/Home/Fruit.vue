@@ -104,7 +104,10 @@
           productId: l.productId,
           count: num
         }).then(res => {
-          console.log(res);
+          if (res.body.code === 0) {
+            this.$Message.success('添加成功');
+            this.$Loading.finish();
+          }
         }, err => {
           console.log(err);
           this.$Message.error('服务器异常');
