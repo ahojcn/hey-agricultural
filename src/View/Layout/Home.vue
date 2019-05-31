@@ -27,12 +27,10 @@
           </CellGroup>
 
           <ShowImages style="padding-bottom: 20px"></ShowImages>
+        </Card>
 
-          <div>
-            <Card>
-              我的订单信息
-            </Card>
-          </div>
+        <Card style="width: 300px; margin-top: 20px">
+          我的订单信息
         </Card>
       </Col>
       <Col span="18" style="margin-left: -30px">

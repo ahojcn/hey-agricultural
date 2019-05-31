@@ -9,18 +9,19 @@
         </Breadcrumb>
       </Col>
       <Col span="12">
+        <!-- TODO 根据商品名查找-->
         <Input search enter-button="查找" placeholder="查找"/>
       </Col>
     </div>
 
-    <div v-for="l in list" :key="l.productId">
+    <div v-for="(l, val, num) in AllList" :key="l.productId">
       <Col span="6" style="padding-bottom: 12px">
         <Tooltip theme="light" max-width="200">
           <!-- 文字提示 -->
           <div slot="content">
             {{l.productDescription}}
           </div>
-
+          {{num}}
           <!-- TODO: fix 显示bug-->
           <!-- 商品详细信息 -->
           <Card>
@@ -31,8 +32,8 @@
             <br/>
 
             <div class="addToPackage">
-              <InputNumber v-model="value"></InputNumber>
-              <Button type="primary" shape="circle" icon="ios-cart">
+              <InputNumber v-model="num"></InputNumber>
+              <Button type="primary" shape="circle" icon="ios-cart" @click="addGoodsToPackage(l, num)">
                 加入购物车
               </Button>
             </div>
@@ -48,8 +49,8 @@
     name: "Fruit",
     data() {
       return {
-        list: [],
-        value: 0,
+        AllList: [],
+        numberOfSelect: 0,
       }
     },
     mounted() {
@@ -70,8 +71,8 @@
       this.$http.post('product/findByCategory', {
         categoryType: 1
       }).then(res => {
-        this.list = res.body.data;
-        // console.log(this.list[0])
+        this.AllList = res.body.data;
+        // console.log(this.AllList[0])
       }, err => {
         this.$Loading.error();
         this.$Message.error('fruit error');
@@ -79,7 +80,33 @@
       });
 
       this.$Loading.finish();
-    }
+    },
+    methods: {
+      // 添加商品到购物车
+      // l.productId 商品ID    num 商品数量
+      addGoodsToPackage(l, num) {
+        this.$Loading.start();
+        if (num === undefined) {
+          num = 1;
+        }
+
+        console.log(l);
+        console.log(l.productId);
+        console.log(num);
+
+        this.$http.post('shopping/add', {
+          productId: l.productId,
+          count: num
+        }).then(res=>{
+          console.log(res);
+        },err=>{
+          console.log(err);
+          this.$Message.error('服务器异常');
+          this.$Loading.error();
+        });
+        this.$Loading.finish();
+      },
+    },
   }
 </script>
 
