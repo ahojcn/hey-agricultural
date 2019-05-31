@@ -104,9 +104,13 @@
           productId: l.productId,
           count: num
         }).then(res => {
+          // TODO 添加到购物车的动画
           if (res.body.code === 0) {
             this.$Message.success('添加成功');
             this.$Loading.finish();
+          } else {
+            this.$Message.error('添加失败');
+            this.$Loading.error();
           }
         }, err => {
           console.log(err);
