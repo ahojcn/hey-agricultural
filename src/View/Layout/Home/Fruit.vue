@@ -1,7 +1,13 @@
 <template>
   <div>
+    <Breadcrumb separator=">" style="padding-bottom: 10px">
+      当前位置：
+      <BreadcrumbItem to="/">农产品采销</BreadcrumbItem>
+      <BreadcrumbItem to="/Fruit">水果</BreadcrumbItem>
+    </Breadcrumb>
+
     <div v-for="l in list" :key="l.productId">
-      <Col span="8" style="padding-right: 5px; padding-bottom: 12px">
+      <Col span="6" style="padding-bottom: 12px">
         <Tooltip theme="light" max-width="200">
           <!-- 文字提示 -->
           <div slot="content">
@@ -11,9 +17,17 @@
           <!-- TODO: fix 显示bug-->
           <!-- 商品详细信息 -->
           <Card>
-            <img :src="l.productIcon" :alt="l.productName" style="width: 300px"><br/>
-            价格：{{l.productPrice}}<br/>
-            库存：{{l.productStock}}<br/>
+            <img :src="l.productIcon" :alt="l.productName" style="width: 200px"><br/>
+            <Tag color="primary">{{l.productName}}</Tag>
+            <Tag color="red">{{l.productPrice}}￥</Tag>
+            <Tag color="volcano">{{'库存' + l.productStock}}</Tag><br/>
+
+            <div class="addToPackage">
+              <InputNumber v-model="value"></InputNumber>
+              <Button type="primary" shape="circle" icon="ios-cart">
+                加入购物车
+              </Button>
+            </div>
           </Card>
         </Tooltip>
       </Col>
@@ -27,6 +41,7 @@
     data() {
       return {
         list: [],
+        value: 0,
       }
     },
     mounted() {
@@ -48,6 +63,7 @@
         categoryType: 1
       }).then(res => {
         this.list = res.body.data;
+        // console.log(this.list[0])
       }, err => {
         this.$Loading.error();
         this.$Message.error('fruit error');
