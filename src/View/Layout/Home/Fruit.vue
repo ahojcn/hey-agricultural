@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>
-      水果
+      水果11
     </h1>
   </div>
 </template>
