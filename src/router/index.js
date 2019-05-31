@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/View/Layout/Home' // Home
 import Fruit from '@/View/Layout/Home/Fruit' // 水果
+import Vegetables from '@/View/Layout/Home/Vegetables' // 蔬菜
+import Flowers from '@/View/Layout/Home/Flowers' // 花卉
+import Poultry from '@/View/Layout/Home/Poultry' // 家禽
+
 import SelfCenter from '@/View/Layout/Home/SelfCenter' // 个人中心
 
 import Relaxation from '@/View/Layout/Relaxation' // 休闲娱乐
@@ -28,12 +32,29 @@ export default new Router({
       children: [
         { // Home 组件
           path: '/',
+          name: 'Home',
           component: Home,
+          redirect: '/Fruit',
           children: [
             {
-              path: '/',
+              path: '/Fruit',
               name: 'Fruit',
               component: Fruit,
+            },
+            {
+              path: '/Vegetables',
+              name: 'Vegetables',
+              component: Vegetables
+            },
+            {
+              path: '/Flowers',
+              name: 'Flowers',
+              component: Flowers
+            },
+            {
+              path: '/Poultry',
+              name: 'Poultry',
+              component: Poultry
             }
           ],
         },

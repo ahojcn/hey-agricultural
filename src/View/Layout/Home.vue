@@ -4,28 +4,35 @@
       <Col span="6">
         <Card title="农产品采销" :padding="0" shadow style="width: 300px;">
           <CellGroup>
+            <!-- :selected="selected === 1" -->
             <Cell title="水果" label="今日两件特惠！" to="Fruit">
               <Icon type="logo-apple" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 1" text="hot" slot="extra"/>
             </Cell>
 
-            <Cell title="蔬菜" label="新鲜的蔬菜哟，不打农药纯天然！">
+            <Cell title="蔬菜" label="新鲜的蔬菜哟，不打农药纯天然！" to="Vegetables">
               <Icon type="logo-pinterest" slot="icon"/>
               <Badge v-show="nowHot.categoryType === 0" text="hot" slot="extra"/>
             </Cell>
 
-            <Cell title="花卉" label="送父母送老师送女友！">
+            <Cell title="花卉" label="送父母送老师送女友！" to="Flowers">
               <Icon type="md-rose" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 2" text="hot" slot="extra"/>
             </Cell>
 
-            <Cell title="家禽" label="鸡你太美！">
+            <Cell title="家禽" label="鸡你太美！" to="Poultry">
               <Icon type="logo-freebsd-devil" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 3" text="hot" slot="extra"/>
             </Cell>
           </CellGroup>
 
-          <Top></Top>
+          <ShowImages style="padding-bottom: 20px"></ShowImages>
+
+          <div>
+            <Card>
+              我的订单信息
+            </Card>
+          </div>
         </Card>
       </Col>
       <Col span="18" style="margin-left: -30px">
@@ -38,15 +45,16 @@
 </template>
 
 <script>
-  import Top from "@/View/Layout/Home/Top";
+  import ShowImages from "@/View/Layout/Home/ShowImages";
 
   export default {
     name: 'Home',
-    components: {Top},
+    components: {ShowImages},
     data() {
       return {
         animate: false,
         userData: null,
+        selected: 1,
         nowHot: {},
       }
     },
@@ -67,7 +75,7 @@
       }
 
       // 获取热门点击
-      this.$http.post('http://tim.natapp1.cc/category/click', {}).then(res => {
+      this.$http.post('category/click', {}).then(res => {
         this.nowHot = res.body.data;
       }, err => {
         this.$Loading.error();
