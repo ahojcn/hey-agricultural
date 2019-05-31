@@ -1,10 +1,17 @@
 <template>
   <div>
-    <Breadcrumb separator=">" style="padding-bottom: 10px">
-      当前位置：
-      <BreadcrumbItem to="/">农产品采销</BreadcrumbItem>
-      <BreadcrumbItem to="/Fruit">水果</BreadcrumbItem>
-    </Breadcrumb>
+    <div class="top" style="padding-bottom: 30px">
+      <Col span="12">
+        <Breadcrumb separator=">" style="padding-bottom: 10px">
+          当前位置：
+          <BreadcrumbItem to="/">农产品采销</BreadcrumbItem>
+          <BreadcrumbItem to="/Fruit">水果</BreadcrumbItem>
+        </Breadcrumb>
+      </Col>
+      <Col span="12">
+        <Input search enter-button="查找" placeholder="查找"/>
+      </Col>
+    </div>
 
     <div v-for="l in list" :key="l.productId">
       <Col span="6" style="padding-bottom: 12px">
@@ -20,7 +27,8 @@
             <img :src="l.productIcon" :alt="l.productName" style="width: 200px"><br/>
             <Tag color="primary">{{l.productName}}</Tag>
             <Tag color="red">{{l.productPrice}}￥</Tag>
-            <Tag color="volcano">{{'库存' + l.productStock}}</Tag><br/>
+            <Tag color="volcano">{{'库存' + l.productStock}}</Tag>
+            <br/>
 
             <div class="addToPackage">
               <InputNumber v-model="value"></InputNumber>
