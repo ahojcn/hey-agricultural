@@ -141,9 +141,8 @@
           localStorage.clear();
           sessionStorage.clear();
           this.$Message.success('退出登录');
-          setTimeout(function () {
-            location.reload();
-          }, 1000);
+          this.$router.push('/');
+          location.reload();
         } else {
 
         }

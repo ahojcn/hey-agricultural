@@ -23,6 +23,8 @@
       <FormItem>
         <Button style="width: 220px" type="primary" @click="handleLogin">登录</Button>
       </FormItem>
+      普通用户：00001 密码：123456<br/>
+      管理员：00000 密码：123456<br/>
     </Form>
   </div>
 </template>
@@ -38,8 +40,8 @@
     data() {
       return {
         loginData: {
-          username: '',
-          password: '',
+          username: '00001',
+          password: '123456',
         },
         loginDataRule: {
           username: [

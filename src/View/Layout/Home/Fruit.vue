@@ -51,11 +51,13 @@
       return {
         AllList: [],
         numberOfSelect: 0,
+        isLogin: false,
       }
     },
     mounted() {
       this.$Loading.start();
-
+      // 获取是否已经登录
+      this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
       // 每次调到此组件就给蔬菜增加一个热门点击
       // this.$http.post('category/click', {
       //   category: 1
@@ -86,20 +88,24 @@
       // l.productId 商品ID    num 商品数量
       addGoodsToPackage(l, num) {
         this.$Loading.start();
+        // 如果没有登录
+        if (this.isLogin === false) {
+          this.$Loading.error();
+          this.$Message.error('请登录，正在跳转至登录页面...');
+          this.$router.push('Login');
+          return;
+        }
+
         if (num === undefined) {
           num = 1;
         }
 
-        console.log(l);
-        console.log(l.productId);
-        console.log(num);
-
         this.$http.post('shopping/add', {
           productId: l.productId,
           count: num
-        }).then(res=>{
+        }).then(res => {
           console.log(res);
-        },err=>{
+        }, err => {
           console.log(err);
           this.$Message.error('服务器异常');
           this.$Loading.error();
