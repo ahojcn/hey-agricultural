@@ -66,6 +66,10 @@
           userId: this.loginData.username,
           userPassword: this.loginData.password
         }).then(res => {
+          if (res.body.data.userIsman === 0) { // 是管理员
+            localStorage.setItem('isAdmin', 'true');
+          }
+
           if (res.body.code === 0) {
             this.$Message.success('登录成功');
             localStorage.setItem('userData', JSON.stringify(res.body.data));

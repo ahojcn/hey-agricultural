@@ -52,8 +52,9 @@
               </Button>
             </MenuItem>
 
+            <!-- TODO : 管理控制台-->
             <MenuItem name="7" v-show="isAdmin === true">
-              <Button style="color: aliceblue">
+              <Button style="color: aliceblue" type="dashed" ghost>
                 <Mallki text="管理控制台"></Mallki>
               </Button>
             </MenuItem>
@@ -62,14 +63,17 @@
             <Dropdown v-show="isLogin === true" @on-click="handleClick">
               <a href="javascript:void(0)">
                 <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
-                个人中心
               </a>
               <DropdownMenu slot="list">
-                <DropdownItem>1</DropdownItem>
-                <DropdownItem>2</DropdownItem>
-                <DropdownItem>3</DropdownItem>
-                <DropdownItem>4</DropdownItem>
-                <DropdownItem name="logout" divided>退出登录</DropdownItem>
+                <router-link to="/SelfCenter">
+                  <DropdownItem name="selfCenter">个人中心</DropdownItem>
+                </router-link>
+                <DropdownItem name="myOrder" v-if="isAdmin === false">
+                  我的订单
+                </DropdownItem>
+                <DropdownItem name="logout" divided>
+                  退出登录
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -111,6 +115,7 @@
 
       this.animate = true;
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
+      this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
 
       if (localStorage.getItem('userData') === null) {
         localStorage.setItem('isLogin', false);
@@ -122,10 +127,9 @@
       this.$Loading.finish(); // 进度条结束
     },
     methods: {
-
       // 退出登录
       handleClick(name) {
-        if (name === 'logout') {
+        if (name === 'logout') {  // 点击退出登录
           this.$http.post('user/logout', {}).then(res => {
             // console.log(res);
             console.log('logout');
@@ -141,7 +145,7 @@
             location.reload();
           }, 1000);
         } else {
-          // 处理其他点击事件
+
         }
       }
     },
