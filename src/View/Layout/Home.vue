@@ -29,14 +29,17 @@
         </Card>
 
         <Card title="购物车" v-if="isLogin === true" style="width: 300px;">
+          <!-- TODO 支付按钮点击事件 -->
+          <Button type="success" icon="logo-usd">支付{{account}}￥</Button>
+          <!-- TODO 我的购物车点击事件 -->
+          <Button type="warning" icon="ios-cart">我的购物车</Button>
           <CellGroup v-for="item in shoppingPackage" :key="item.productInfo.productId">
             <Cell>
               {{item.productInfo.productName}}
-              应付{{item.productInfo.productPrice * item.productNum}}
+              应付：{{item.productInfo.productPrice * item.productNum}}￥
               <Button type="text" @click="handleCellClick(item)">详情</Button>
             </Cell>
           </CellGroup>
-          <Page :total="shoppingPackageLength" size="small" show-total show-sizer simple/>
         </Card>
       </Col>
       <Col span="18" style="margin-left: -30px">
@@ -78,6 +81,7 @@
         isLogin: false, // 是否已经登录
         shoppingPackage: {}, // 购物车信息
         shoppingPackageLength: 0, // 数量
+        account: 0, // 购物车应支付价钱
       }
     },
     mounted() {
@@ -115,6 +119,15 @@
           this.$Loading.error();
           console.log('Home : 请求订单信息失败');
           console.log(err);
+        });
+
+        // 获取购物车结算价格
+        this.$http.post('shopping/amount', {}).then(res => {
+          this.account = res.body.data;
+        }, err => {
+          this.$Loading.error();
+          console.log('Home : 获取总价钱失败');
+          console.log(err)
         })
       }
 
