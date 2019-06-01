@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left: 44%; margin-top: 50px">
+  <div style="margin-left: 42%; margin-top: 50px">
     <Logo></Logo>
 
     <br/>
@@ -32,7 +32,6 @@
 <script>
   import Mallki from "@/components/Mallki";
   import Logo from "@/components/Logo";
-
 
   export default {
     name: "Login",
@@ -92,7 +91,13 @@
     },
     mounted() {
       this.animate = true;
-    }
+    },
+    beforeCreate() {
+      // 如果已经登录，跳转至首页
+      if (JSON.parse(localStorage.getItem('isLogin')) === true) {
+        this.$router.push('/');
+      }
+    },
   }
 </script>
 
