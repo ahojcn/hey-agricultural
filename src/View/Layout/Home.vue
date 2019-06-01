@@ -4,7 +4,6 @@
       <Col span="6">
         <Card title="农产品采销" :padding="0" shadow style="width: 300px;">
           <CellGroup>
-            <!-- :selected="selected === 1" -->
             <Cell title="水果" label="今日两件特惠！" to="Fruit">
               <Icon type="logo-apple" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 1" text="hot" slot="extra"/>
@@ -29,8 +28,15 @@
           <ShowImages style="padding-bottom: 20px"></ShowImages>
         </Card>
 
-        <Card style="width: 300px; margin-top: 20px">
-          我的订单信息
+        <Card title="购物车" v-if="isLogin === true" style="width: 300px;">
+          <CellGroup v-for="item in shoppingPackage" :key="item.productInfo.productId">
+            <Cell>
+              {{item.productInfo.productName}}
+              应付{{item.productInfo.productPrice * item.productNum}}
+              <Button type="text" @click="handleCellClick(item)">详情</Button>
+            </Cell>
+          </CellGroup>
+          <Page :total="shoppingPackageLength" size="small" show-total show-sizer simple/>
         </Card>
       </Col>
       <Col span="18" style="margin-left: -30px">
@@ -39,6 +45,22 @@
         </transition>
       </Col>
     </Row>
+
+    <Affix :offset-bottom="20" style="margin-left: 85%">
+      <!-- TODO 添加点击事件-->
+      <Button type="warning" shape="circle" icon="ios-cart">我的购物车</Button>
+      <!--  -->
+      <Dropdown v-show="isLogin === true">
+        <a href="javascript:void(0)">
+          <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
+        </a>
+        <DropdownMenu slot="list">
+          <router-link to="/SelfCenter">
+            <DropdownItem name="selfCenter">个人中心</DropdownItem>
+          </router-link>
+        </DropdownMenu>
+      </Dropdown>
+    </Affix>
   </div>
 </template>
 
@@ -50,15 +72,18 @@
     components: {ShowImages},
     data() {
       return {
-        animate: false,
-        userData: null,
-        selected: 1,
-        nowHot: {},
+        animate: false, // 动画控制
+        userData: null, // 用户信息
+        nowHot: {}, // 当前热门
+        isLogin: false, // 是否已经登录
+        shoppingPackage: {}, // 购物车信息
+        shoppingPackageLength: 0, // 数量
       }
     },
     mounted() {
       this.$Loading.start();
       this.animate = true;
+      this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
 
       // 如果已经登录 并且 没有刷新就刷新一次
       if (localStorage.getItem('isLogin') === 'true' && localStorage.getItem('refresh') === '1') {
@@ -81,8 +106,32 @@
         console.log(err);
       });
 
+      // 如果已经登录，请求订单信息，如果未登录则不请求
+      if (this.isLogin === true) {
+        this.$http.post('shopping/list', {}).then(res => {
+          this.shoppingPackage = res.body.data;
+          this.shoppingPackageLength = res.body.data.length;
+        }, err => {
+          this.$Loading.error();
+          console.log('Home : 请求订单信息失败');
+          console.log(err);
+        })
+      }
+
       this.$Loading.finish();
-    }
+    },
+    methods: {
+      handleCellClick(item) {
+        this.$Modal.info({
+          title: '订单详情',
+          content: `编号：${item.productInfo.productId}<br/>
+                    名称：${item.productInfo.productName}<br/>
+                    数量：${item.productNum}<br/>
+                    单价：${item.productInfo.productPrice}<br/>
+                    描述：${item.productInfo.productDescription}<br/>`
+        });
+      }
+    },
   }
 </script>
 
