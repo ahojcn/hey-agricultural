@@ -62,7 +62,6 @@
           return;
         }
 
-        // TODO 管理登录验证
         this.$http.post('user/login', {
           userId: this.loginData.username,
           userPassword: this.loginData.password

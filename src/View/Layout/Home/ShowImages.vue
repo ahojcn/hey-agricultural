@@ -1,6 +1,6 @@
 <template>
   <div style="width: 300px">
-    <Carousel autoplay loop radius-dot trigger="hover">
+    <Carousel autoplay loop dots="none" trigger="hover">
       <CarouselItem>
         <div class="demo-carousel">
           <img style="width: 300px"

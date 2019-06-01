@@ -25,19 +25,24 @@
             </Cell>
           </CellGroup>
 
-          <ShowImages style="padding-bottom: 20px"></ShowImages>
+          <ShowImages></ShowImages>
         </Card>
 
-        <Card title="购物车" v-if="isLogin === true" style="width: 300px;">
+        <Card :title="'购物车：' + account + '￥'" v-if="isLogin === true" style="width: 300px;">
           <!-- TODO 支付按钮点击事件 -->
-          <Button type="success" icon="logo-usd">支付{{account}}￥</Button>
-          <!-- TODO 我的购物车点击事件 -->
-          <Button type="warning" icon="ios-cart">我的购物车</Button>
+          <Col span="12">
+            <Button type="success" icon="logo-usd">支付{{account}}元</Button>
+          </Col>
+          <Col span="12">
+            <Button type="warning" icon="ios-cart" @click="shoppingPackageDetail = !shoppingPackageDetail">我的购物车</Button>
+          </Col>
           <CellGroup v-for="item in shoppingPackage" :key="item.productInfo.productId">
             <Cell>
               {{item.productInfo.productName}}
               应付：{{item.productInfo.productPrice * item.productNum}}￥
-              <Button type="text" @click="handleCellClick(item)">详情</Button>
+              <Button type="text" @click="handleCellClick(item)" style="float: left">
+                <Mallki text="详情"></Mallki>
+              </Button>
             </Cell>
           </CellGroup>
         </Card>
@@ -49,9 +54,26 @@
       </Col>
     </Row>
 
+    <!-- 购物车抽屉 -->
+    <div>
+      <Drawer title="我的购物车" placement="left" v-model="shoppingPackageDetail" width="42">
+        <Table stripe ref="selection" height="500" :columns="shoppingPackageFormTitle"
+               :data="shoppingPackageFormInfo"></Table>
+        <br/>
+        <Button type="primary" @click="handleSelectAll(true)">全选</Button>
+        <Button type="primary" @click="handleSelectAll(false)">全不选</Button>
+        <Button type="primary" @click="exportData(1)">
+          <Icon type="ios-download-outline"></Icon>
+          导出购物车数据
+        </Button>
+      </Drawer>
+    </div>
+
+    <!-- 浮动在右下角的购物车按钮和个人中心下拉菜单 -->
     <Affix :offset-bottom="20" style="margin-left: 85%">
-      <!-- TODO 添加点击事件-->
-      <Button type="warning" shape="circle" icon="ios-cart">我的购物车</Button>
+      <Button type="warning" shape="circle" icon="ios-cart" @click="shoppingPackageDetail=!shoppingPackageDetail">
+        我的购物车
+      </Button>
       <!--  -->
       <Dropdown v-show="isLogin === true">
         <a href="javascript:void(0)">
@@ -69,10 +91,11 @@
 
 <script>
   import ShowImages from "@/View/Layout/Home/ShowImages";
+  import Mallki from "@/components/Mallki";
 
   export default {
     name: 'Home',
-    components: {ShowImages},
+    components: {Mallki, ShowImages},
     data() {
       return {
         animate: false, // 动画控制
@@ -82,6 +105,66 @@
         shoppingPackage: {}, // 购物车信息
         shoppingPackageLength: 0, // 数量
         account: 0, // 购物车应支付价钱
+        shoppingPackageDetail: false, // 是否显示我的购物车（抽屉）
+        shoppingPackageFormTitle: [ // 购物车表格头
+          {
+            type: 'selection',
+            width: 30,
+            align: 'center'
+          },
+          {
+            title: '名称',
+            key: 'productName'
+          },
+          {
+            title: '单价',
+            key: 'productPrice'
+          },
+          {
+            title: '数量',
+            key: 'productNum'
+          },
+          {
+            title: '总价',
+            key: 'total'
+          },
+          {
+            title: '删除',
+            key: 'action',
+            width: 150,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.show(params.index)
+                    }
+                  }
+                }, '详情'),
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index)
+                    }
+                  }
+                }, '-1')
+              ]);
+            }
+          }
+        ],
+        shoppingPackageFormInfo: [] // 购物车表格信息
       }
     },
     mounted() {
@@ -115,6 +198,16 @@
         this.$http.post('shopping/list', {}).then(res => {
           this.shoppingPackage = res.body.data;
           this.shoppingPackageLength = res.body.data.length;
+          // 处理成表格形式
+          for (let i = 0; i < this.shoppingPackageLength; i++) {
+            let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
+            temp.productName = this.shoppingPackage[i].productInfo.productName;
+            temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
+            temp.productNum = this.shoppingPackage[i].productNum;
+            temp.total = temp.productNum * temp.productPrice;
+            temp.id = this.shoppingPackage[i].productInfo.productId;
+            this.shoppingPackageFormInfo.push(temp);
+          }
         }, err => {
           this.$Loading.error();
           console.log('Home : 请求订单信息失败');
@@ -128,7 +221,7 @@
           this.$Loading.error();
           console.log('Home : 获取总价钱失败');
           console.log(err)
-        })
+        });
       }
 
       this.$Loading.finish();
@@ -143,6 +236,36 @@
                     单价：${item.productInfo.productPrice}<br/>
                     描述：${item.productInfo.productDescription}<br/>`
         });
+      },
+      handleSelectAll(status) {
+        this.$refs.selection.selectAll(status);
+      },
+      exportData(type) {
+        this.$refs.table.exportCsv({
+          filename: 'The original data'
+        });
+      },
+      show(index) {
+        this.$Modal.info({
+          title: '订单详情',
+          content: `编号：${this.shoppingPackage[index].productInfo.productId}<br/>
+                    名称：${this.shoppingPackage[index].productInfo.productName}<br/>
+                    数量：${this.shoppingPackage[index].productNum}<br/>
+                    单价：${this.shoppingPackage[index].productInfo.productPrice}<br/>
+                    描述：${this.shoppingPackage[index].productInfo.productDescription}<br/>`
+        });
+      },
+      remove(index) { // 从购物车删除元素
+        this.$http.post('shopping/delete', {
+          productId: this.shoppingPackageFormInfo[index].id
+        }).then(res => {
+
+        }, err => {
+          console.log('从购物车删除元素失败');
+          console.log(err);
+        });
+
+        this.shoppingPackageFormInfo[index].productNum -= 1;
       }
     },
   }
