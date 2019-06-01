@@ -22,7 +22,7 @@
             {{l.productDescription}}
           </div>
           {{num}}
-          <!-- TODO: fix 显示bug-->
+
           <!-- 商品详细信息 -->
           <Card>
             <img :src="l.productIcon" :alt="l.productName" style="width: 200px"><br/>
@@ -33,7 +33,8 @@
 
             <div class="addToPackage">
               <InputNumber v-model="num"></InputNumber>
-              <Button type="primary" shape="circle" icon="ios-cart" @click="addGoodsToPackage(l, num)">
+              <Button type="primary" shape="circle" icon="ios-cart"
+                      @click="addGoodsToPackage(l, num)">
                 加入购物车
               </Button>
             </div>
@@ -58,7 +59,7 @@
       this.$Loading.start();
       // 获取是否已经登录
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
-      // 每次调到此组件就给蔬菜增加一个热门点击
+      // 每次调到此组件就给水果增加一个热门点击
       // this.$http.post('category/click', {
       //   category: 1
       // }).then(res => {
@@ -88,6 +89,7 @@
       // l.productId 商品ID    num 商品数量
       addGoodsToPackage(l, num) {
         this.$Loading.start();
+
         // 如果没有登录
         if (this.isLogin === false) {
           this.$Loading.error();
@@ -104,9 +106,8 @@
           productId: l.productId,
           count: num
         }).then(res => {
-          // TODO 添加到购物车的动画
           if (res.body.code === 0) {
-            this.$Message.success('添加成功');
+            this.$Message.success('购物车' + l.productName + '+' + num);
             this.$Loading.finish();
           } else {
             this.$Message.error('添加失败');
@@ -124,5 +125,10 @@
 </script>
 
 <style scoped>
-
+  .ball {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red;
+  }
 </style>
