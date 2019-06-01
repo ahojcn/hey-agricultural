@@ -34,7 +34,8 @@
             <Button type="success" icon="logo-usd">支付{{account}}元</Button>
           </Col>
           <Col span="12">
-            <Button type="warning" icon="ios-cart" @click="shoppingPackageDetail = !shoppingPackageDetail">我的购物车</Button>
+            <Button type="warning" icon="ios-cart" @click="shoppingPackageDetail = !shoppingPackageDetail">我的购物车
+            </Button>
           </Col>
           <CellGroup v-for="item in shoppingPackage" :key="item.productInfo.productId">
             <Cell>
@@ -57,6 +58,7 @@
     <!-- 购物车抽屉 -->
     <div>
       <Drawer title="我的购物车" placement="left" v-model="shoppingPackageDetail" width="42">
+        <br/>
         <Table stripe ref="selection" height="500" :columns="shoppingPackageFormTitle"
                :data="shoppingPackageFormInfo"></Table>
         <br/>
@@ -164,7 +166,7 @@
             }
           }
         ],
-        shoppingPackageFormInfo: [] // 购物车表格信息
+        shoppingPackageFormInfo: [], // 购物车表格信息
       }
     },
     mounted() {

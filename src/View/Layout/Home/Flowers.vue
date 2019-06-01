@@ -9,12 +9,12 @@
         </Breadcrumb>
       </Col>
       <Col span="12">
-        <!-- TODO 根据商品名查找-->
-        <Input search enter-button="查找" placeholder="查找"/>
+        <Input style="padding-right: 70px" v-model="searchKeywords" search enter-button placeholder="查找..." autofocus
+               autocomplete/>
       </Col>
     </div>
 
-    <div v-for="(l, val, num) in AllList" :key="l.productId">
+    <div v-for="(l, val, num) in search(searchKeywords)" :key="l.productId">
       <Col span="6" style="padding-bottom: 12px">
         <Tooltip theme="light" max-width="200">
           <!-- 文字提示 -->
@@ -47,19 +47,20 @@
 
 <script>
   export default {
-    name: "Vegetables",
+    name: "Flowers",
     data() {
       return {
         AllList: [],
         numberOfSelect: 0,
         isLogin: false,
+        searchKeywords: '', // 查找关键字
       }
     },
     mounted() {
       this.$Loading.start();
       // 获取是否已经登录
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
-      // 每次调到此组件就给蔬菜增加一个热门点击
+      // 每次调到此组件就给水果增加一个热门点击
       // this.$http.post('category/click', {
       //   category: 1
       // }).then(res => {
@@ -75,7 +76,6 @@
         categoryType: 2
       }).then(res => {
         this.AllList = res.body.data;
-        // console.log(this.AllList[0])
       }, err => {
         this.$Loading.error();
         this.$Message.error('fruit error');
@@ -120,6 +120,19 @@
         });
         this.$Loading.finish();
       },
+      search(keywords) {
+        let retArr = [];
+        if (keywords === '') {
+          return this.AllList;
+        } else {
+          this.AllList.forEach(item => {
+            if (item.productName.indexOf(keywords) !== -1) {
+              retArr.push(item);
+            }
+          })
+        }
+        return retArr;
+      },
     },
   }
 </script>
@@ -132,4 +145,3 @@
     background-color: red;
   }
 </style>
-

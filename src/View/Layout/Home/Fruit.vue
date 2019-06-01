@@ -9,12 +9,12 @@
         </Breadcrumb>
       </Col>
       <Col span="12">
-        <!-- TODO 根据商品名查找-->
-        <Input search enter-button="查找" placeholder="查找"/>
+        <Input style="padding-right: 70px" v-model="searchKeywords" search enter-button placeholder="查找..." autofocus
+               autocomplete/>
       </Col>
     </div>
 
-    <div v-for="(l, val, num) in AllList" :key="l.productId">
+    <div v-for="(l, val, num) in search(searchKeywords)" :key="l.productId">
       <Col span="6" style="padding-bottom: 12px">
         <Tooltip theme="light" max-width="200">
           <!-- 文字提示 -->
@@ -53,6 +53,7 @@
         AllList: [],
         numberOfSelect: 0,
         isLogin: false,
+        searchKeywords: '', // 查找关键字
       }
     },
     mounted() {
@@ -75,7 +76,6 @@
         categoryType: 1
       }).then(res => {
         this.AllList = res.body.data;
-        // console.log(this.AllList[0])
       }, err => {
         this.$Loading.error();
         this.$Message.error('fruit error');
@@ -119,6 +119,19 @@
           this.$Loading.error();
         });
         this.$Loading.finish();
+      },
+      search(keywords) {
+        let retArr = [];
+        if (keywords === '') {
+          return this.AllList;
+        } else {
+          this.AllList.forEach(item => {
+            if (item.productName.indexOf(keywords) !== -1) {
+              retArr.push(item);
+            }
+          })
+        }
+        return retArr;
       },
     },
   }
