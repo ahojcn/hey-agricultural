@@ -5,7 +5,7 @@
         <Breadcrumb separator=">" style="padding-bottom: 10px">
           当前位置：
           <BreadcrumbItem to="/">农产品采销</BreadcrumbItem>
-          <BreadcrumbItem to="/Fruit">花卉</BreadcrumbItem>
+          <BreadcrumbItem to="/Flowers">花卉</BreadcrumbItem>
         </Breadcrumb>
       </Col>
       <Col span="12">
