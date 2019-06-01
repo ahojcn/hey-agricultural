@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div style="margin-left: 44%; margin-top: 50px">
+    <div style="margin-left: 42%;">
       <Logo></Logo>
 
+      <!-- TODO 用户注册-->
       <br/>
       <br/>
       <h1 style="margin-left: 5px">

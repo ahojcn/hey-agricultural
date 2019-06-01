@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left: 42%; margin-top: 50px">
+  <div style="margin-left: 42%;">
     <Logo></Logo>
 
     <br/>
@@ -21,7 +21,16 @@
         </Input>
       </FormItem>
       <FormItem>
-        <Button style="width: 220px" type="primary" @click="handleLogin">登录</Button>
+        <Button style="width: 220px" type="primary" @click="handleLogin">
+          登录
+        </Button>
+      </FormItem>
+      <FormItem>
+        <router-link to="/Regist">
+          <Button style="width: 220px" type="success">
+            注册
+          </Button>
+        </router-link>
       </FormItem>
       普通用户：00001 密码：123456<br/>
       管理员：00000 密码：123456<br/>
