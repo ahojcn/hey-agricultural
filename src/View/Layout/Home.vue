@@ -198,17 +198,21 @@
       // 如果已经登录，请求订单信息，如果未登录则不请求
       if (this.isLogin === true) {
         this.$http.post('shopping/list', {}).then(res => {
-          this.shoppingPackage = res.body.data;
-          this.shoppingPackageLength = res.body.data.length;
-          // 处理成表格形式
-          for (let i = 0; i < this.shoppingPackageLength; i++) {
-            let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
-            temp.productName = this.shoppingPackage[i].productInfo.productName;
-            temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
-            temp.productNum = this.shoppingPackage[i].productNum;
-            temp.total = temp.productNum * temp.productPrice;
-            temp.id = this.shoppingPackage[i].productInfo.productId;
-            this.shoppingPackageFormInfo.push(temp);
+          if (res.body.code === 1) {
+            this.account = 0;
+          } else {
+            this.shoppingPackage = res.body.data;
+            this.shoppingPackageLength = res.body.data.length;
+            // 处理成表格形式
+            for (let i = 0; i < this.shoppingPackageLength; i++) {
+              let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
+              temp.productName = this.shoppingPackage[i].productInfo.productName;
+              temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
+              temp.productNum = this.shoppingPackage[i].productNum;
+              temp.total = temp.productNum * temp.productPrice;
+              temp.id = this.shoppingPackage[i].productInfo.productId;
+              this.shoppingPackageFormInfo.push(temp);
+            }
           }
         }, err => {
           this.$Loading.error();

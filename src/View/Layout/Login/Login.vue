@@ -9,14 +9,14 @@
     </h1>
     <br/>
 
-    <Form ref="formInline" :model="loginData" :rules="loginDataRule">
+    <Form ref="formInline" :model="userData" :rules="loginDataRule">
       <FormItem prop="user">
-        <Input type="text" v-model="loginData.username" placeholder="用户名" style="width: 220px">
+        <Input type="text" v-model="userData.username" placeholder="用户名" style="width: 220px">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
       <FormItem prop="password">
-        <Input type="password" v-model="loginData.password" placeholder="密码" style="width: 220px">
+        <Input type="password" v-model="userData.password" placeholder="密码" style="width: 220px">
           <Icon type="ios-lock-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
@@ -32,8 +32,8 @@
           </Button>
         </router-link>
       </FormItem>
-      普通用户：00001 密码：123456<br/>
-      管理员：00000 密码：123456<br/>
+      userId：11111 password：11111<br/>
+      userId：00000 password：123456<br/>
     </Form>
   </div>
 </template>
@@ -47,9 +47,9 @@
     components: {Logo, Mallki},
     data() {
       return {
-        loginData: {
-          username: '00001',
-          password: '123456',
+        userData: {
+          username: '11111',
+          password: '11111',
         },
         loginDataRule: {
           username: [
@@ -65,15 +65,15 @@
     methods: {
       handleLogin() {
         this.$Loading.start();
-        if (this.loginData.username === '' || this.loginData.username === '') {
+        if (this.userData.username === '' || this.userData.username === '') {
           this.$Message.error('用户名和密码不能为空');
           this.$Loading.error();
           return;
         }
 
         this.$http.post('user/login', {
-          userId: this.loginData.username,
-          userPassword: this.loginData.password
+          userId: this.userData.username,
+          userPassword: this.userData.password
         }).then(res => {
           if (res.body.data.userIsman === 0) { // 是管理员
             localStorage.setItem('isAdmin', 'true');

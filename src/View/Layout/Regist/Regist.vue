@@ -3,7 +3,6 @@
     <div style="margin-left: 42%;">
       <Logo></Logo>
 
-      <!-- TODO 用户注册-->
       <br/>
       <br/>
       <h1 style="margin-left: 5px">
@@ -11,15 +10,30 @@
       </h1>
       <br/>
 
-      <Form ref="formInline" :model="loginData" :rules="loginDataRule">
-        <FormItem prop="user">
-          <Input type="text" v-model="loginData.username" placeholder="用户名" style="width: 220px">
+      <Form ref="formInline" :model="userData" :rules="loginDataRule">
+        <FormItem prop="userId">
+          <Input type="text" v-model="userData.userId" placeholder="ID" style="width: 220px">
             <Icon type="ios-person-outline" slot="prepend"></Icon>
           </Input>
         </FormItem>
         <FormItem prop="password">
-          <Input type="password" v-model="loginData.password" placeholder="密码" style="width: 220px">
+          <Input type="password" v-model="userData.password" placeholder="密码" style="width: 220px">
             <Icon type="ios-lock-outline" slot="prepend"></Icon>
+          </Input>
+        </FormItem>
+        <FormItem prop="username">
+          <Input type="text" v-model="userData.username" placeholder="姓名" style="width: 220px">
+            <Icon type="ios-person-outline" slot="prepend"></Icon>
+          </Input>
+        </FormItem>
+        <FormItem prop="userAddress">
+          <Input type="text" v-model="userData.userAddress" placeholder="地址" style="width: 220px">
+            <Icon type="ios-person-outline" slot="prepend"></Icon>
+          </Input>
+        </FormItem>
+        <FormItem prop="userPhone">
+          <Input type="text" v-model="userData.userPhone" placeholder="手机号" style="width: 220px">
+            <Icon type="ios-person-outline" slot="prepend"></Icon>
           </Input>
         </FormItem>
         <FormItem>
@@ -40,25 +54,73 @@
     components: {Logo, Mallki},
     data() {
       return {
-        // TODO 注册请求
-        loginData: {
-          username: '',
-          password: '',
+        userData: {
+          userId: '',
+          password: '', // 密码
+          username: '', // 用户名
+          userAddress: '', // 家庭住址,收货地址
+          userIsman: 1,
+          userPhone: '1', // 手机号
+          userIcon: 'https://i.loli.net/2017/08/21/599a521472424.jpg', // 用户头像地址
         },
         loginDataRule: {
+          userId: [
+            {required: true, message: '请输入ID', trigger: 'blur'},
+            {type: 'string', min: 5, message: 'ID不可小于5', trigger: 'blur'}
+          ],
           username: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
+            {required: true, message: '请输入姓名', trigger: 'blur'},
+            {type: 'string', max: 50, message: '姓名长度过长', trigger: 'blur'}
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
             {type: 'string', min: 3, message: '密码长度不能小于 3', trigger: 'blur'}
-          ]
+          ],
+          userAddress: [
+            {required: true, message: '请输入收货地址', trigger: 'blur'},
+          ],
+          userPhone: [
+            {required: true, message: '请输入手机号', trigger: 'blur'},
+            {type: 'string', min: 11, message: '手机号错误', trigger: 'blur'}
+          ],
         }
       }
     },
     methods: {
       handleRegist() {
+        this.$Loading.start();
 
+        if (this.userData.userId === ''
+          || this.userData.username === ''
+          || this.userData.userAddress === ''
+          || (this.userData.userPhone === '1' && this.userData.userPhone !== 11)) {
+          this.$Message.error('请检查信息是否正确');
+          this.$Loading.error();
+          return;
+        }
+
+        this.$http.post('user/register', {
+          userId: this.userData.userId,
+          userPassword: this.userData.password,
+          userName: this.userData.username,
+          userAddress: this.userData.userAddress,
+          userIsman: this.userData.userIsman,
+          userPhone: this.userData.userPhone,
+          userIcon: this.userData.userIcon,
+        }).then(res => {
+          if (res.body.code === 0) {
+            this.$Message.success('注册成功');
+            this.$Message.success('欢迎您，' + this.userData.username);
+          } else {
+            this.$Message.error(res.body.msg);
+          }
+        }, err => {
+          this.$Loading.error();
+          console.log(err);
+          this.$Message.error('注册失败，服务器异常！');
+        });
+
+        this.$Loading.finish();
       },
     }
   }
