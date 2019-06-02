@@ -32,7 +32,7 @@
             <br/>
 
             <div class="addToPackage">
-              <InputNumber min="0" v-model="num"></InputNumber>
+              <InputNumber min="0" :max="l.productStock" v-model="num"></InputNumber>
               <Button type="primary" shape="circle" icon="ios-cart"
                       @click="addGoodsToPackage(l, num)">
                 加入购物车
