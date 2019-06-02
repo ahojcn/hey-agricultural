@@ -29,9 +29,8 @@
         </Card>
 
         <Card :title="'购物车：' + account + '￥'" v-if="isLogin === true" style="width: 300px;">
-          <!-- TODO 支付按钮点击事件 -->
           <Col span="12">
-            <Button type="success" icon="logo-usd">支付{{account}}元</Button>
+            <Button type="success" icon="logo-usd" @click="pay">支付{{account}}元</Button>
           </Col>
           <Col span="12">
             <Button type="warning" icon="ios-cart" @click="shoppingPackageDetail = !shoppingPackageDetail">我的购物车
@@ -94,6 +93,15 @@
 <script>
   import ShowImages from "@/View/Layout/Home/ShowImages";
   import Mallki from "@/components/Mallki";
+
+  function sleep(n) {
+    let start = new Date().getTime();
+    while (true) {
+      if (new Date().getTime() - start > n) {
+        break;
+      }
+    }
+  }
 
   export default {
     name: 'Home',
@@ -222,7 +230,11 @@
 
         // 获取购物车结算价格
         this.$http.post('shopping/amount', {}).then(res => {
-          this.account = res.body.data;
+          if (res.body.data === undefined) {
+            this.account = 0;
+          } else {
+            this.account = res.body.data;
+          }
         }, err => {
           this.$Loading.error();
           console.log('Home : 获取总价钱失败');
@@ -272,7 +284,38 @@
         });
 
         this.shoppingPackageFormInfo[index].productNum -= 1;
-      }
+      },
+      pay() { // 点击支付后的处理操作
+        this.$Loading.start();
+
+        this.$Message.info('创建订单中...');
+        this.$http.post('order/create', {}).then(res => {
+          if (res.body.code === 0) {
+            this.$Message.success(res.body.msg);
+            this.$Message.success('订单ID' + res.body.data.masterOrderId);
+            this.$Message.success('正在跳转支付...');
+            this.$http.post('pay/affirmPay', {
+              masterOrderId: res.body.data.masterOrderId
+            }).then(resp => {
+              window.location.href = resp.url
+                + '?masterOrderId='
+                + res.body.data.masterOrderId;
+            }, errp => {
+              console.log(errp);
+              this.$Loading.error();
+            })
+          } else {
+            this.$Message.error(res.body.msg);
+            this.$Loading.error();
+          }
+        }, err => {
+          this.$Loading.error();
+          this.$Message.error('服务器异常，创建订单失败');
+          console.log(err);
+        });
+
+        this.$Loading.finish();
+      },
     },
   }
 </script>
