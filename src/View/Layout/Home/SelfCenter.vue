@@ -32,6 +32,23 @@
     </Card>
 
     <Divider/>
+    <!-- 我的所有订单 -->
+    <div>
+      <Card shadow>
+        <p slot="title">我的订单</p>
+        <Table stripe ref="selection" height="500" :columns="myOrderFormTitle"
+               :data="myOrder"></Table>
+        <br/>
+        <Button type="primary" @click="handleSelectAll(true)">全选</Button>
+        <Button type="primary" @click="handleSelectAll(false)">全不选</Button>
+        <Button type="primary" @click="exportData(1)">
+          <Icon type="ios-download-outline"></Icon>
+          导出订单数据
+        </Button>
+      </Card>
+    </div>
+
+    <Divider/>
     <!-- 购物车 -->
     <div>
       <Card shadow>
@@ -59,6 +76,52 @@
         uploadData: {
           smfile: 'touxiang',
         },
+        myOrder: [], // 我的订单信息
+        myOrderFormTitle: [
+          {
+            type: 'selection',
+            width: 30,
+            align: 'center'
+          },
+          {
+            title: '日期',
+            key: 'createTime',
+            align: 'center'
+          },
+          {
+            title: '价格',
+            key: 'orderAmount',
+            align: 'center'
+          },
+          {
+            title: '订单ID',
+            key: 'orderId',
+            align: 'center'
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 150,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.more(params.index)
+                    }
+                  }
+                }, '详情'),
+              ]);
+            }
+          }],
         isLogin: false, // 是否已经登录
         shoppingPackage: {}, // 购物车信息
         shoppingPackageLength: 0, // 数量
@@ -87,7 +150,7 @@
             key: 'total'
           },
           {
-            title: '删除',
+            title: '操作',
             key: 'action',
             width: 150,
             align: 'center',
@@ -128,7 +191,6 @@
     mounted() {
       this.$Loading.start();
       this.userData = JSON.parse(localStorage.getItem('userData'));
-      this.$Loading.finish();
 
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
 
@@ -143,15 +205,6 @@
       if (this.userData !== null) {
         this.$Message.success('你好，' + this.userData.userName);
       }
-
-      // 获取热门点击
-      this.$http.post('category/click', {}).then(res => {
-        this.nowHot = res.body.data;
-      }, err => {
-        this.$Loading.error();
-        this.$Message.error('Home/ 获取热门失败，服务器异常');
-        console.log(err);
-      });
 
       // 如果已经登录，请求订单信息，如果未登录则不请求
       if (this.isLogin === true) {
@@ -182,6 +235,20 @@
           console.log('Home : 获取总价钱失败');
           console.log(err)
         });
+
+        // 获取自己的所有订单
+        this.$http.post('order/allListByBuyerId', {
+          buyerId: this.userData.userId
+        }).then(res => {
+          this.myOrder = res.body.data;
+          for (let i = 0; i < res.body.data.length; ++i) {
+            this.myOrder[i].createTime = new Date(this.myOrder[i].createTime).toLocaleString();
+          }
+        }, err => {
+          console.log(err);
+        });
+
+        this.$Loading.finish();
       }
     },
     methods: {
@@ -224,6 +291,17 @@
         });
 
         this.shoppingPackageFormInfo[index].productNum -= 1;
+      },
+      more(i) {
+        this.$Modal.info({
+          title: '订单详情',
+          content: `订单编号：${this.myOrder[i].orderId}<br/>
+                    用户：${this.myOrder[i].buyerId}<br/>
+                    时间：${this.myOrder[i].createTime}<br/>
+                    价钱：${this.myOrder[i].orderAmount}<br/>
+                    状态：${this.myOrder[i].orderStatus === 0 ? '未支付' : '已支付'}<br/>
+                    `
+        });
       }
     }
   }
