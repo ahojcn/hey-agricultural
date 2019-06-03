@@ -17,7 +17,7 @@
               <Icon type="ios-brush" slot="icon"/>
             </Cell>
 
-            <Cell title="订单查询" label="查询所有订单状况" to="Find">
+            <Cell title="订单查询" label="查询所有订单状况" to="OrderInfo">
               <Icon type="md-reorder" slot="icon"/>
             </Cell>
           </CellGroup>

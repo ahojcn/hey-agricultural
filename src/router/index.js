@@ -22,6 +22,10 @@ import Login from '@/View/Layout/Login/Login' // 登录页
 import Regist from '@/View/Layout/Regist/Regist' // 注册页
 
 import Console from '@/View/Layout/Console/Index' // 管理控制台
+import Add from '@/View/Layout/Console/Add' // 增加商品
+import Del from '@/View/Layout/Console/Del' // 删除商品
+import Modify from '@/View/Layout/Console/Modify' // 修改商品
+import OrderInfo from '@/View/Layout/Console/OrderInfo' // 查询订单状况
 
 Vue.use(Router);
 
@@ -98,7 +102,30 @@ export default new Router({
         { // 管理控制台
           path: '/Console',
           name: 'Console',
-          component: Console
+          component: Console,
+          redirect: '/Add',
+          children: [
+            {
+              path: '/Add',
+              name: 'Add',
+              component: Add
+            },
+            {
+              path: '/Del',
+              name: 'Del',
+              component: Del
+            },
+            {
+              path: '/Modify',
+              name: 'Modify',
+              component: Modify
+            },
+            {
+              path: '/OrderInfo',
+              name: 'OrderInfo',
+              component: OrderInfo
+            },
+          ],
         }
       ]
     },
