@@ -3,23 +3,23 @@
     <Row>
       <Col span="6">
         <Card title="农产品采销" :padding="0" shadow style="width: 300px;">
-          <CellGroup>
-            <Cell title="水果" label="今日两件特惠！" to="Fruit">
+          <CellGroup @on-click="test">
+            <Cell name="fruit" title="水果" label="今日两件特惠！" to="Fruit">
               <Icon type="logo-apple" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 1" text="hot" slot="extra"/>
             </Cell>
 
-            <Cell title="蔬菜" label="新鲜的蔬菜哟，不打农药纯天然！" to="Vegetables">
+            <Cell name="vegetables" title="蔬菜" label="新鲜的蔬菜哟，不打农药纯天然！" to="Vegetables">
               <Icon type="logo-pinterest" slot="icon"/>
               <Badge v-show="nowHot.categoryType === 0" text="hot" slot="extra"/>
             </Cell>
 
-            <Cell title="花卉" label="送父母送老师送女友！" to="Flowers">
+            <Cell name="flowers" title="花卉" label="送父母送老师送女友！" to="Flowers">
               <Icon type="md-rose" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 2" text="hot" slot="extra"/>
             </Cell>
 
-            <Cell title="家禽" label="鸡你太美！" to="Poultry">
+            <Cell name="poultry" title="家禽" label="鸡你太美！" to="Poultry">
               <Icon type="logo-freebsd-devil" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 3" text="hot" slot="extra"/>
             </Cell>
@@ -307,6 +307,9 @@
 
         this.$Loading.finish();
       },
+      test(index) {
+        console.log(index);
+      }
     },
   }
 </script>

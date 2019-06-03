@@ -79,7 +79,6 @@
         categoryType: 1
       }).then(res => {
         this.AllList = res.body.data;
-        console.log(this.AllList);
       }, err => {
         this.$Loading.error();
         this.$Message.error('fruit error');
