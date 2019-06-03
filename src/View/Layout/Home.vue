@@ -100,7 +100,7 @@
     data() {
       return {
         animate: false, // 动画控制
-        userData: null, // 用户信息
+        userData: {}, // 用户信息
         nowHot: {}, // 当前热门
         isLogin: false, // 是否已经登录
         shoppingPackage: {}, // 购物车信息

@@ -53,7 +53,7 @@
             </MenuItem>
 
             <MenuItem name="7" v-show="isAdmin === true">
-              <Button style="color: aliceblue" type="dashed" ghost to="/Console">
+              <Button style="color: aliceblue" type="dashed" ghost to="/Console" icon="md-cube">
                 <Mallki text="管理控制台"></Mallki>
               </Button>
             </MenuItem>
