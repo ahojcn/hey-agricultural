@@ -21,6 +21,8 @@ import index from '@/View/Layout/index' // 首页
 import Login from '@/View/Layout/Login/Login' // 登录页
 import Regist from '@/View/Layout/Regist/Regist' // 注册页
 
+import Console from '@/View/Layout/Console/Index' // 管理控制台
+
 Vue.use(Router);
 
 export default new Router({
@@ -55,7 +57,7 @@ export default new Router({
               path: '/Poultry',
               name: 'Poultry',
               component: Poultry
-            }
+            },
           ],
         },
         { // 登录组件
@@ -92,6 +94,11 @@ export default new Router({
           path: '/SelfCenter',
           name: 'SelfCenter',
           component: SelfCenter
+        },
+        { // 管理控制台
+          path: '/Console',
+          name: 'Console',
+          component: Console
         }
       ]
     },

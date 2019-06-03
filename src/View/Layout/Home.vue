@@ -94,15 +94,6 @@
   import ShowImages from "@/View/Layout/Home/ShowImages";
   import Mallki from "@/components/Mallki";
 
-  function sleep(n) {
-    let start = new Date().getTime();
-    while (true) {
-      if (new Date().getTime() - start > n) {
-        break;
-      }
-    }
-  }
-
   export default {
     name: 'Home',
     components: {Mallki, ShowImages},

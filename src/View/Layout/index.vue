@@ -52,9 +52,8 @@
               </Button>
             </MenuItem>
 
-            <!-- TODO : 管理控制台-->
             <MenuItem name="7" v-show="isAdmin === true">
-              <Button style="color: aliceblue" type="dashed" ghost>
+              <Button style="color: aliceblue" type="dashed" ghost to="/Console">
                 <Mallki text="管理控制台"></Mallki>
               </Button>
             </MenuItem>
