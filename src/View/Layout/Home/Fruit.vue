@@ -31,6 +31,8 @@
             <Tag color="volcano">{{'库存' + l.productStock}}</Tag>
             <br/>
 
+            买家评分
+            <Rate allow-half disabled icon="ios-heart" :value="parseInt(l.productGrade)"/>
             <div class="addToPackage">
               <InputNumber :min="min" :max="l.productStock" v-model="num"></InputNumber>
               <Button type="primary" shape="circle" icon="ios-cart"
@@ -77,6 +79,7 @@
         categoryType: 1
       }).then(res => {
         this.AllList = res.body.data;
+        console.log(this.AllList);
       }, err => {
         this.$Loading.error();
         this.$Message.error('fruit error');

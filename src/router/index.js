@@ -27,6 +27,8 @@ import Del from '@/View/Layout/Console/Del' // 删除商品
 import Modify from '@/View/Layout/Console/Modify' // 修改商品
 import OrderInfo from '@/View/Layout/Console/OrderInfo' // 查询订单状况
 
+import pay from '@/View/Layout/pay' // pay success
+
 Vue.use(Router);
 
 export default new Router({
@@ -63,6 +65,11 @@ export default new Router({
               component: Poultry
             },
           ],
+        },
+        { ///////////////////// for test
+          path: '/pay',
+          name: 'pay',
+          component: pay
         },
         { // 登录组件
           path: '/Login',
