@@ -52,6 +52,7 @@
 <script>
   import Mallki from "@/components/Mallki";
   import Logo from "@/components/Logo";
+  import uploadImg from 'smms';
 
   export default {
     name: "Regist",
@@ -137,7 +138,7 @@
 
         uploadImg(this.$refs.uploadImg.files[0]).then(res => {
           // console.log(res.data.url);
-          this.productInfo.productIcon = res.data.url;
+          this.userData.userIcon = res.data.url;
         });
         this.$Loading.finish();
       }

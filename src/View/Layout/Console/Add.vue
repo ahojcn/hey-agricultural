@@ -108,9 +108,14 @@
             categoryType: this.productInfo.categoryType,
             productGrade: this.productInfo.productGrade
           }).then(res => {
-            console.log(res);
+            if (res.body.code === 0) {
+              this.$Message.success(res.body.msg);
+            } else {
+              this.$Message.error(res.body.msg);
+            }
           }, err => {
             console.log(err);
+            this.$Message.error('服务器异常');
           });
         }
         this.$Loading.finish();
