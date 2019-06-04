@@ -8,7 +8,9 @@
 
 <script>
   export default {
-    name: "Del"
+    name: "Del",
+    mounted() {
+    },
   }
 </script>
 
