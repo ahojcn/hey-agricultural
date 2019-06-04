@@ -32,7 +32,7 @@
           </Button>
         </router-link>
       </FormItem>
-      userId：11111 password：11111<br/>
+      userId：00001 password：123456<br/>
       userId：00000 password：123456<br/>
     </Form>
   </div>
@@ -48,8 +48,8 @@
     data() {
       return {
         userData: {
-          username: '11111',
-          password: '11111',
+          username: '00001',
+          password: '123456',
         },
         loginDataRule: {
           username: [

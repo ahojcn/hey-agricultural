@@ -1,39 +1,46 @@
 <template>
   <div>
-    <h1>
-      增加商品
-    </h1>
-    <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
-      <FormItem prop="user">
-        <Input type="text" v-model="formInline.user" placeholder="Username">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
-      </FormItem>
-      <FormItem prop="password">
-        <Input type="password" v-model="formInline.password" placeholder="Password">
-          <Icon type="ios-lock-outline" slot="prepend"></Icon>
-        </Input>
-      </FormItem>
-      <FormItem>
-        <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
-      </FormItem>
-    </Form>
+    <Row>
+      <Col span="8">
+        <Form ref="formInline" :model="formInline" :rules="ruleInline">
+          <FormItem prop="user">
+            <Input type="text" v-model="formInline.user" placeholder="Username">
+              <Icon type="ios-person-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem prop="password">
+            <Input type="password" v-model="formInline.password" placeholder="Password">
+              <Icon type="ios-lock-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem>
+            <input type="file" ref="uploadImg"></input>
+            <Button type="success" @click="uploadProductIcon">
+              <Mallki text="点击上传"></Mallki>
+            </Button>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+          </FormItem>
+        </Form>
+      </Col>
+      <Col span="14" style="padding-left: 100px">
+        <img v-if="productInfo.productIcon!==''" :src="productInfo.productIcon" alt="商品描述"/>
+      </Col>
+    </Row>
+
   </div>
 </template>
 
 <script>
+  import uploadImg from 'smms';
+  import Mallki from "../../../components/Mallki";
+
   export default {
     name: "Add",
+    components: {Mallki},
     data() {
       return {
-        /*
-        * productName 商品名称：String
-          productPrice 商品价格：Double
-          productStock 商品库存：Integer
-          productDescription 商品描述：String
-          productIcon 商品图片：String
-          categoryType 商品类型：Integer
-          productGrade 商品评分：String*/
         productInfo: {
           productName: '',
           productPrice: '',
@@ -67,6 +74,21 @@
             this.$Message.error('Fail!');
           }
         })
+      },
+      uploadProductIcon() {
+        // console.log(this.$refs.uploadImg.files[0])
+        this.$Loading.start();
+        if (this.$refs.uploadImg.files.length === 0) {
+          this.$Message.error('请选择一个图片文件');
+          this.$Loading.error();
+          return;
+        }
+
+        uploadImg(this.$refs.uploadImg.files[0]).then(res => {
+          // console.log(res.data.url);
+          this.productInfo.productIcon = res.data.url;
+        });
+        this.$Loading.finish();
       }
     }
   }

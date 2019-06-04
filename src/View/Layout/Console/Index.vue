@@ -26,7 +26,9 @@
 
       <Col span="18" style="margin-left: -30px">
         <transition enter-active-class="fadeIn" mode="out-in" translate="yes" leave-active-class="fadeOut">
-          <router-view v-if="animate" class="animated"></router-view>
+          <Card>
+            <router-view v-if="animate" class="animated"></router-view>
+          </Card>
         </transition>
       </Col>
     </Row>
