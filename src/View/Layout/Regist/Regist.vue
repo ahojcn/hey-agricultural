@@ -22,20 +22,24 @@
           </Input>
         </FormItem>
         <FormItem prop="username">
-          <Input type="text" v-model="userData.username" placeholder="姓名" style="width: 220px">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-          </Input>
+          <Input type="text" v-model="userData.username" placeholder="姓名" style="width: 220px"></Input>
         </FormItem>
         <FormItem prop="userAddress">
-          <Input type="text" v-model="userData.userAddress" placeholder="地址" style="width: 220px">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-          </Input>
+          <Input type="text" v-model="userData.userAddress" placeholder="地址" style="width: 220px"></Input>
         </FormItem>
         <FormItem prop="userPhone">
-          <Input type="text" v-model="userData.userPhone" placeholder="手机号" style="width: 220px">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-          </Input>
+          <Input type="text" v-model="userData.userPhone" placeholder="手机号" style="width: 220px"></Input>
         </FormItem>
+        <FormItem>
+          <Input style="width: 220px" type="text" v-model="userData.userIcon" placeholder="头像，上传图片后自动填写" disabled></Input>
+        </FormItem>
+        <FormItem style="width: 220px">
+          <input type="file" ref="uploadImg" style="width: 130px"></input>
+          <Button type="text" @click="uploadProductIcon">
+            <Mallki text="点击上传"></Mallki>
+          </Button>
+        </FormItem>
+
         <FormItem>
           <Button style="width: 220px" type="primary" @click="handleRegist">注册</Button>
         </FormItem>
@@ -61,7 +65,7 @@
           userAddress: '', // 家庭住址,收货地址
           userIsman: 1,
           userPhone: '1', // 手机号
-          userIcon: 'https://i.loli.net/2017/08/21/599a521472424.jpg', // 用户头像地址
+          userIcon: '', // 用户头像地址
         },
         loginDataRule: {
           userId: [
@@ -122,6 +126,21 @@
 
         this.$Loading.finish();
       },
+      uploadProductIcon() {
+        // console.log(this.$refs.uploadImg.files[0])
+        this.$Loading.start();
+        if (this.$refs.uploadImg.files.length === 0) {
+          this.$Message.error('请选择一个图片文件');
+          this.$Loading.error();
+          return;
+        }
+
+        uploadImg(this.$refs.uploadImg.files[0]).then(res => {
+          // console.log(res.data.url);
+          this.productInfo.productIcon = res.data.url;
+        });
+        this.$Loading.finish();
+      }
     }
   }
 </script>
