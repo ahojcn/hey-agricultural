@@ -63,16 +63,6 @@
       this.$Loading.start();
       // 获取是否已经登录
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
-      // 每次调到此组件就给水果增加一个热门点击
-      // this.$http.post('category/click', {
-      //   category: 1
-      // }).then(res => {
-      //   //
-      // }, err => {
-      //   this.$Loading.error();
-      //   this.$Message.error('Fruit/ 增加热门点击error');
-      //   console.log(err);
-      // });
 
       // 获取 水果 商品列表
       this.$http.post('product/findByCategory', {

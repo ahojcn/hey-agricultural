@@ -3,7 +3,7 @@
     <Row>
       <Col span="6">
         <Card title="农产品采销" :padding="0" shadow style="width: 300px;">
-          <CellGroup @on-click="test">
+          <CellGroup @on-click="clickCell">
             <Cell name="fruit" title="水果" label="今日两件特惠！" to="Fruit">
               <Icon type="logo-apple" slot="icon"/>
               <Badge v-if="nowHot.categoryType === 1" text="hot" slot="extra"/>
@@ -307,8 +307,29 @@
 
         this.$Loading.finish();
       },
-      test(index) {
-        console.log(index);
+      clickCell(index) {
+        // 每次调到此组件就给水果增加一个热门点击
+        // (0、蔬菜 1、水果 2、花草 3、家禽)
+        let temp = 0;
+        if (index === 'fruit') {
+          temp = 1;
+        } else if (index === 'vegetables') {
+          temp = 0;
+        } else if (index === 'flowers') {
+          temp = 2;
+        } else {
+          temp = 3;
+        }
+
+        this.$http.post('category/click', {
+          category: temp
+        }).then(res => {
+          // 返回的是当前最高热度的东西
+        }, err => {
+          this.$Loading.error();
+          this.$Message.error('Fruit/ 增加热门点击error');
+          console.log(err);
+        });
       }
     },
   }

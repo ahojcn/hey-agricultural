@@ -66,7 +66,7 @@ export default new Router({
             },
           ],
         },
-        { ///////////////////// for test
+        { ///////////////////// for clickCell
           path: '/pay',
           name: 'pay',
           component: pay
