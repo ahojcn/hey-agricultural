@@ -29,12 +29,12 @@
 
           <div class="cmd" v-for="i in saidHistory" :key="i.time">
             <!--<p>-->
-              <!--我({{i.time}}) - {{i.text}}-->
+            <!--我({{i.time}}) - {{i.text}}-->
             <!--</p>-->
             <!--<div class="cmd" v-for="j in adminSaid" :key="j.time">-->
-              <!--<p v-show="adminHasSaid">-->
-                <!--客服({{j.time}}) - {{j.text}}-->
-              <!--</p>-->
+            <!--<p v-show="adminHasSaid">-->
+            <!--客服({{j.time}}) - {{j.text}}-->
+            <!--</p>-->
             <!--</div>-->
           </div>
 
@@ -51,7 +51,6 @@
       </div>
 
     </div>
-
 
   </div>
 </template>
@@ -84,7 +83,15 @@
     },
     methods: {
       handleSend() { // TODO
+        this.$Loading.start();
+        this.$http.post('msg/send', {
+
+        }).then(res => {
+        }, err => {
+        });
+
         this.inputText = '';
+        this.$Loading.finish();
       },
       autoScroll() {
         this.$nextTick(() => {
