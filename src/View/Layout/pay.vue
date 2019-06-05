@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>pay</h1>
+    <h1>pay success</h1>
   </div>
 </template>
 
