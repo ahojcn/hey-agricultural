@@ -69,7 +69,8 @@
     components: {Mallki},
     data() {
       return {
-        allList: [],
+        allList: [], // 用来备份
+        tempList: [], // 用来显示
         allListTitle: [
           {
             title: '商品名',
@@ -85,6 +86,36 @@
             title: '商品类型',
             key: 'categoryType',
             align: 'center',
+            filters: [
+              {
+                label: '水果',
+                value: 1
+              },
+              {
+                label: '蔬菜',
+                value: 0
+              },
+              {
+                label: '花卉',
+                value: 2
+              },
+              {
+                label: '家禽',
+                value: 3
+              }
+            ],
+            filterMultiple: false,
+            filterMethod (value, row) {
+              if (value === 1) {
+                return row.categoryType === '水果';
+              } else if (value === 0) {
+                return row.categoryType === '蔬菜';
+              } else if (value === 2) {
+                return row.categoryType === '花卉';
+              } else {
+                return row.categoryType === '家禽';
+              }
+            }
           },
           {
             title: '操作',
@@ -135,6 +166,18 @@
       this.$http.post('product/list', {}).then(res => {
         if (res.body.code === 0) {
           this.allList = res.body.data;
+          this.tempList = this.allList;
+          for (let i = 0; i < res.body.data.length; i++) {
+            if (this.allList[i].categoryType === 1) {
+              this.allList[i].categoryType = String('水果');
+            } else if (this.allList[i].categoryType === 0) {
+              this.allList[i].categoryType = String('蔬菜');
+            } else if (this.allList[i].categoryType === 2) {
+              this.allList[i].categoryType = String('花卉');
+            } else {
+              this.allList[i].categoryType = String('家禽');
+            }
+          }
         } else {
           this.$Message.error(res.body.msg);
         }
@@ -149,7 +192,7 @@
         // this.allList[index].productId
         this.$Loading.start();
         this.modifySomeThing = true;
-        this.needToModify = this.allList[index];
+        this.needToModify = this.tempList[index];
         // console.log(this.needToModify);
         this.$Loading.finish();
       },
