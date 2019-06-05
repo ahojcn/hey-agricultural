@@ -20,12 +20,9 @@
             <span class="prompt"></span><span class="cmd">正在连接服务器...ok!</span>
           </p>
 
-          <div class="cmd" v-for="i in saidHistory" :key="i.time">
-            <p v-if="i.adminSaid !== null">
-              客服({{i.adminSaid.time}}) # {{i.adminSaid.text}}
-            </p>
-            <p v-if="i.iSaid !== null">
-              我({{i.iSaid.time}}) # {{i.iSaid.text}}
+          <div class="cmd" v-for="i in msgGetData" :key="i.time">
+            <p v-if="i !== []">
+              {{i.msgRead === 1 ? '已读' : '未读'}} # 客户({{i.msgFrom}}) # {{i.msgMsg}}
             </p>
           </div>
 
@@ -33,9 +30,12 @@
             <span :class="lastLineClass" v-html="lastLineContent"></span>
           </p>
         </div>
+        <Select v-model="selectWho" style="width:200px">
+          <Option v-for="item in msgListUser" :value="item.msgFrom" :key="item.msgFrom">{{ item.msgFrom }}</Option>
+        </Select>
         <label>
           <Input type="textarea" clearable style="width: 300px" v-model="inputText" :autosize="true"
-                 placeholder="输入问题 ..."></Input>
+                 placeholder="输入回答 ..."></Input>
           <Button type="primary" @click="handleSend">发送</Button>
           <Button type="warning" @click="handleInputCancel">清空输入</Button>
         </label>
@@ -54,6 +54,7 @@
         lastLineContent: '...',
         userData: null,
         inputText: '',
+        msgGetData: [],
         saidHistory: [
           {
             adminSaid: {
@@ -66,9 +67,19 @@
             }
           }
         ],
+        msgListUser: [],
+        selectWho: ''
       }
     },
+    mounted() {
+      this.$Loading.start();
 
+      setInterval(()=>{
+        this.getMessage();
+      },1000);
+
+      this.$Loading.finish();
+    },
     computed: {
       lastLineClass() {
         if (this.lastLineContent === '&nbsp') {
@@ -79,23 +90,41 @@
       },
     },
     methods: {
-      handleSend() { // TODO
+      getMessage() {
+        this.$http.post('msg/accept', {}).then(res => {
+          if (res.body.code === 0) {
+            this.msgGetData = res.body.data;
+            for (let i = 0; i < this.msgGetData.length; i++) {
+              let flag = false;
+              for (let j = 0; j < this.msgListUser.length; j++) {
+                if (this.msgGetData[i].msgFrom === this.msgListUser[j].msgFrom) {
+                  flag = true;
+                }
+              }
+              if (flag === false) { // 如果没有重复的 id
+                let j = {
+                  msgFrom: this.msgGetData[i].msgFrom,
+                  userMsg: this.msgGetData[i].msgMsg
+                };
+                this.msgListUser.push(j);
+              }
+            }
+          } else {
+            this.$Message.error(res.body.data);
+          }
+        }, err => {
+          console.log(err);
+          this.$Message.error('msg/accept error');
+        });
+      },
+      handleSend() {
         this.$Loading.start();
-
         this.$http.post('msg/send', {
-          msgTo: '00000',
+          msgTo: this.selectWho,
           msgMsg: this.inputText
         }).then(res => {
           if (res.body.code === 0) {
             this.$Message.success('发送' + res.body.msg);
-            let j = {
-              iSaid: {
-                text: this.inputText,
-                time: new Date().toLocaleTimeString()
-              },
-              adminSaid: null
-            };
-            this.saidHistory.push(j);
             this.inputText = '';
           } else {
             this.$Message.error(res.body.msg);
@@ -106,7 +135,6 @@
           this.$Loading.error();
           this.$Message.error('msg.send err');
         });
-
         this.$Loading.finish();
       },
       autoScroll() {
@@ -118,15 +146,6 @@
         this.inputText = '';
       }
     },
-    mounted() {
-      this.$Loading.start();
-      this.$http.post('msg/accept', {}).then(res => {
-        console.log(res);
-      }, err => {
-        console.log(err);
-      });
-      this.$Loading.finish();
-    }
   }
 </script>
 

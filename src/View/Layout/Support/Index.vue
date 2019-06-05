@@ -67,6 +67,7 @@
             }
           }
         ],
+        getMessageLength: 0,
       }
     },
     computed: {
@@ -79,7 +80,7 @@
       },
     },
     methods: {
-      handleSend() { // TODO
+      handleSend() {
         this.$Loading.start();
 
         this.$http.post('msg/send', {
@@ -116,7 +117,24 @@
       },
       handleInputCancel() {
         this.inputText = '';
-      }
+      },
+      getMessage() {
+        this.$http.post('msg/accept', {}).then(res => {
+          if (res.body.data.length !== this.getMessageLength) {
+            this.getMessageLength = res.body.data.length;
+            let j = {
+              iSaid: null,
+              adminSaid: {
+                text: res.body.data[res.body.data.length - 1].msgMsg,
+                time: new Date().toLocaleTimeString()
+              },
+            };
+            this.saidHistory.push(j);
+          }
+        }, err => {
+          console.log(err);
+        })
+      },
     },
     mounted() {
       this.$Loading.start();
@@ -126,6 +144,28 @@
       } else {
         this.actionResult += '本站尊敬的会员，' + this.userData.userName;
       }
+
+      this.$http.post('msg/accept', {}).then(res => {
+        this.getMessageLength = res.body.data.length;
+        for (let i = 0; i < res.body.data.length; i++) {
+          let j = {
+            iSaid: null,
+            adminSaid: {
+              text: res.body.data[i].msgMsg,
+              time: new Date().toLocaleTimeString()
+            },
+          };
+          this.saidHistory.push(j);
+        }
+      }, err => {
+        console.log(err);
+      });
+
+      // 每秒刷新一次获取管理员发送来的消息
+      setInterval(() => {
+        this.getMessage();
+      }, 1000);
+
       this.$Loading.finish();
     },
   }
