@@ -52,7 +52,7 @@
 
 <script>
   import uploadImg from 'smms';
-  import Mallki from "@/components/Mallki";
+  import Mallki from "../../../components/Mallki";
 
   export default {
     name: "Add",
