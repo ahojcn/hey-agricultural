@@ -194,51 +194,10 @@
         console.log(err);
       });
 
-      // 如果已经登录，请求订单信息，如果未登录则不请求
-      if (this.isLogin === true) {
-        this.$http.post('shopping/list', {}).then(res => {
-          if (res.body.code === 1) {
-            this.account = 0;
-          } else {
-            this.shoppingPackage = res.body.data;
-            this.shoppingPackageLength = res.body.data.length;
-            // 处理成表格形式
-            for (let i = 0; i < this.shoppingPackageLength; i++) {
-              let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
-              temp.productName = this.shoppingPackage[i].productInfo.productName;
-              temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
-              temp.productNum = this.shoppingPackage[i].productNum;
-              temp.total = temp.productNum * temp.productPrice;
-              temp.id = this.shoppingPackage[i].productInfo.productId;
-              this.shoppingPackageFormInfo.push(temp);
-            }
-            localStorage.setItem('shoppingPackageFormInfo', JSON.stringify(this.shoppingPackageFormInfo));
-            localStorage.setItem('shoppingPackage', JSON.stringify(this.shoppingPackage));
-          }
-        }, err => {
-          this.$Loading.error();
-          console.log('Home : 请求订单信息失败');
-          console.log(err);
-        });
-        // 设置一个定时器，每隔1秒刷新一次，看看有没有新的东西加入购物车
-        setInterval(() => {
-          this.shoppingPackage = JSON.parse(localStorage.getItem('shoppingPackage'));
-          this.shoppingPackageFormInfo = JSON.parse(localStorage.getItem('shoppingPackageFormInfo'));
-        }, 1000);
-
-        // 获取购物车结算价格
-        this.$http.post('shopping/amount', {}).then(res => {
-          if (res.body.data === undefined) {
-            this.account = 0;
-          } else {
-            this.account = res.body.data;
-          }
-        }, err => {
-          this.$Loading.error();
-          console.log('Home : 获取总价钱失败');
-          console.log(err)
-        });
-      }
+      // 设置一个定时器，每隔1秒刷新一次，看看有没有新的东西加入购物车
+      setInterval(() => {
+        this.getShoppingInfo();
+      }, 1000);
 
       this.$Loading.finish();
     },
@@ -337,7 +296,48 @@
           this.$Message.error('Fruit/ 增加热门点击error');
           console.log(err);
         });
-      }
+      },
+      getShoppingInfo() {
+        // 如果已经登录，请求订单信息，如果未登录则不请求
+        if (this.isLogin === true) {
+          this.$http.post('shopping/list', {}).then(res => {
+            if (res.body.code === 1) {
+              this.account = 0;
+            } else {
+              this.shoppingPackage = res.body.data;
+              this.shoppingPackageLength = res.body.data.length;
+              // 处理成表格形式
+              this.shoppingPackageFormInfo = [];
+              for (let i = 0; i < this.shoppingPackageLength; i++) {
+                let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
+                temp.productName = this.shoppingPackage[i].productInfo.productName;
+                temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
+                temp.productNum = this.shoppingPackage[i].productNum;
+                temp.total = temp.productNum * temp.productPrice;
+                temp.id = this.shoppingPackage[i].productInfo.productId;
+                this.shoppingPackageFormInfo.push(temp);
+              }
+            }
+          }, err => {
+            this.$Loading.error();
+            console.log('Home : 请求订单信息失败');
+            console.log(err);
+          });
+
+          // 获取购物车结算价格
+          this.$http.post('shopping/amount', {}).then(res => {
+            if (res.body.data === undefined) {
+              this.account = 0;
+            } else {
+              this.account = res.body.data;
+            }
+          }, err => {
+            this.$Loading.error();
+            console.log('Home : 获取总价钱失败');
+            console.log(err)
+          });
+        }
+      },
     },
   }
 </script>
