@@ -122,7 +122,21 @@
           this.$Loading.error();
         });
         this.$Loading.finish();
-      }
+      },
+      // TODO
+      search(searchKeyWords){
+        let retArr = [];
+        if (searchKeyWords === '') {
+          return this.allList;
+        } else {
+          this.AllList.forEach(item => {
+            if (item.productName.indexOf(keywords) !== -1) {
+              retArr.push(item);
+            }
+          })
+        }
+        return retArr;
+      },
     }
   }
 </script>

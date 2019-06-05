@@ -8,12 +8,10 @@
           </div>
 
           <div class="layout-nav">
-            <router-link to="/">
-              <MenuItem name="Home">
-                <Icon type="md-home"/>
-                主页
-              </MenuItem>
-            </router-link>
+            <MenuItem name="Home" to="/">
+              <Icon type="md-home"/>
+              农产品采销
+            </MenuItem>
 
             <MenuItem name="2" to="/Relaxation">
               <Icon type="md-cafe"/>
