@@ -57,7 +57,7 @@
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
-            {type: 'string', min: 3, message: '密码长度不能小于 6', trigger: 'blur'}
+            {type: 'string', min: 3, message: '密码长度不能小于 3', trigger: 'blur'}
           ]
         },
       }

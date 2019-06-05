@@ -1,8 +1,5 @@
 <template>
   <div>
-    <h1>
-      修改商品信息
-    </h1>
     <Table stripe :columns="allListTitle" :data="allList"></Table>
 
     <div>

@@ -4,20 +4,20 @@
       <Col span="6">
         <!-- TODO 功能具体实现 -->
         <Card title="管理员" icon="md-person" :padding="0" shadow style="width: 300px;">
-          <CellGroup>
-            <Cell title="上架新商品" label="新增各种商品" to="Add">
+          <CellGroup @on-click="clickCell">
+            <Cell name="上架新商品" title="上架新商品" label="新增各种商品" to="Add">
               <Icon type="md-arrow-round-up" slot="icon"/>
             </Cell>
 
-            <Cell title="下架商品" label="下架已有商品" to="Del">
+            <Cell name="下架商品" title="下架商品" label="下架已有商品" to="Del">
               <Icon type="md-arrow-round-down" slot="icon"/>
             </Cell>
 
-            <Cell title="修改商品信息" label="修改商品信息" to="Modify">
+            <Cell name="修改商品信息" title="修改商品信息" label="修改商品信息" to="Modify">
               <Icon type="ios-brush" slot="icon"/>
             </Cell>
 
-            <Cell title="订单查询" label="查询所有订单状况" to="OrderInfo">
+            <Cell name="订单查询" title="订单查询" label="查询所有订单状况" to="OrderInfo">
               <Icon type="md-reorder" slot="icon"/>
             </Cell>
           </CellGroup>
@@ -25,23 +25,29 @@
       </Col>
 
       <Col span="18" style="margin-left: -30px">
-        <transition enter-active-class="fadeIn" mode="out-in" translate="yes" leave-active-class="fadeOut">
-          <Card>
+        <Card>
+          <p slot="title">
+            <Mallki :text="cardTitle"></Mallki>
+          </p>
+          <transition enter-active-class="fadeIn" mode="out-in" translate="yes" leave-active-class="fadeOut">
             <router-view v-if="animate" class="animated"></router-view>
-          </Card>
-        </transition>
+          </transition>
+        </Card>
       </Col>
     </Row>
   </div>
 </template>
 
 <script>
+  import Mallki from "../../../components/Mallki";
   export default {
     name: "Index",
+    components: {Mallki},
     data() {
       return {
         userData: {},
         animate: false, // 动画控制
+        cardTitle: '上架新商品', // 卡片头
       }
     },
     mounted() {
@@ -53,6 +59,12 @@
       }
 
       this.$Loading.finish();
+    },
+    methods: {
+      clickCell(name) {
+        // console.log(name);
+        this.cardTitle = name;
+      }
     }
   }
 </script>

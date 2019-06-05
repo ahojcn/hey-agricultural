@@ -1,8 +1,5 @@
 <template>
   <div>
-    <h1>
-      删除商品
-    </h1>
     <Input v-model="searchKeywords" search enter-button placeholder="查找..." autofocus
            autocomplete/>
     <Table stripe :columns="allListTitle" :data="allList"></Table>
