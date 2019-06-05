@@ -36,7 +36,7 @@
             <Button type="warning" icon="ios-cart" @click="shoppingPackageDetail = !shoppingPackageDetail">我的购物车
             </Button>
           </Col>
-          <CellGroup v-for="item in shoppingPackage" :key="item.productInfo.productId">
+          <CellGroup v-for="item in shoppingPackage" :key="item.productInfo.createTime">
             <Cell>
               {{item.productInfo.productName}}
               应付：{{item.productInfo.productPrice * item.productNum}}￥
@@ -212,12 +212,19 @@
               temp.id = this.shoppingPackage[i].productInfo.productId;
               this.shoppingPackageFormInfo.push(temp);
             }
+            localStorage.setItem('shoppingPackageFormInfo', JSON.stringify(this.shoppingPackageFormInfo));
+            localStorage.setItem('shoppingPackage', JSON.stringify(this.shoppingPackage));
           }
         }, err => {
           this.$Loading.error();
           console.log('Home : 请求订单信息失败');
           console.log(err);
         });
+        // 设置一个定时器，每隔1秒刷新一次，看看有没有新的东西加入购物车
+        setInterval(() => {
+          this.shoppingPackage = JSON.parse(localStorage.getItem('shoppingPackage'));
+          this.shoppingPackageFormInfo = JSON.parse(localStorage.getItem('shoppingPackageFormInfo'));
+        }, 1000);
 
         // 获取购物车结算价格
         this.$http.post('shopping/amount', {}).then(res => {

@@ -101,6 +101,24 @@
         }).then(res => {
           if (res.body.code === 0) {
             this.$Message.success('购物车' + l.productName + '+' + num);
+            let temp = {
+              id: l.productId,
+              productName: l.productName,
+              productNum: num,
+              productPrice: l.productPrice,
+              total: l.productName * l.productPrice
+            };
+            let test = {
+              productInfo: l,
+              productNum: num
+            };
+            let shoppingPackage = JSON.parse(localStorage.getItem('shoppingPackage'));
+            console.log(shoppingPackage);
+            let shoppingPackageFormInfo = JSON.parse(localStorage.getItem('shoppingPackageFormInfo'));
+            shoppingPackage.push(test);
+            shoppingPackageFormInfo.push(temp);
+            // localStorage.setItem('shoppingPackage', JSON.stringify(shoppingPackage));
+            // localStorage.setItem('shoppingPackageFormInfo', JSON.stringify(shoppingPackageFormInfo));
             this.$Loading.finish();
           } else {
             this.$Message.error('添加失败');
