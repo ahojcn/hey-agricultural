@@ -26,6 +26,7 @@ import Add from '@/View/Layout/Console/Add' // 增加商品
 import Del from '@/View/Layout/Console/Del' // 删除商品
 import Modify from '@/View/Layout/Console/Modify' // 修改商品
 import OrderInfo from '@/View/Layout/Console/OrderInfo' // 查询订单状况
+import AdminSupport from '@/View/Layout/Console/Support' // 在线技术帮扶
 
 import pay from '@/View/Layout/pay' // pay success
 
@@ -132,6 +133,11 @@ export default new Router({
               name: 'OrderInfo',
               component: OrderInfo
             },
+            {
+              path: '/AdminSupport',
+              name: 'AdminSupport',
+              component: AdminSupport
+            }
           ],
         }
       ]

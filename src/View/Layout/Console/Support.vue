@@ -10,7 +10,7 @@
         </ul>
       </div>
 
-      <div style="position:absolute;top:0;left:0;right:0;overflow:auto;z-index:1;margin-top:30px;"
+      <div style="top:0;left:0;right:0;overflow:auto;z-index:1"
            ref="terminalWindow">
         <div class="terminal-window" id="terminalWindow">
           <span>
@@ -34,7 +34,7 @@
           </p>
         </div>
         <label>
-          <Input type="textarea" clearable style="width: 350px" v-model="inputText" :autosize="true"
+          <Input type="textarea" clearable style="width: 300px" v-model="inputText" :autosize="true"
                  placeholder="输入问题 ..."></Input>
           <Button type="primary" @click="handleSend">发送</Button>
           <Button type="warning" @click="handleInputCancel">清空输入</Button>
@@ -42,13 +42,12 @@
       </div>
 
     </div>
-
   </div>
 </template>
 
 <script>
   export default {
-    name: "Index",
+    name: "Support",
     data() {
       return {
         actionResult: '你好，',
@@ -59,7 +58,7 @@
           {
             adminSaid: {
               time: new Date().toLocaleTimeString(),
-              text: '您好，这里是智慧农业平台在线技术帮扶，请问您有什么问题？如需线下技术帮扶，请电话联系：15229720759。'
+              text: ''
             },
             iSaid: {
               time: new Date().toLocaleTimeString(),
@@ -69,6 +68,7 @@
         ],
       }
     },
+
     computed: {
       lastLineClass() {
         if (this.lastLineContent === '&nbsp') {
@@ -120,26 +120,25 @@
     },
     mounted() {
       this.$Loading.start();
-      this.userData = JSON.parse(localStorage.getItem('userData'));
-      if (this.userData === null) {
-        this.actionResult += '游客';
-      } else {
-        this.actionResult += '本站尊敬的会员，' + this.userData.userName;
-      }
+      this.$http.post('msg/accept', {}).then(res => {
+        console.log(res);
+      }, err => {
+        console.log(err);
+      });
       this.$Loading.finish();
-    },
+    }
   }
 </script>
 
 <style scoped lang="scss">
   .terminal {
     position: relative;
-    width: 50%;
+    width: 80%;
     border-radius: 4px;
     color: white;
     margin-bottom: 10px;
     max-height: 580px;
-    margin-left: 25%;
+    margin-left: 10%;
   }
 
   .terminal .header ul.shell-dots li {

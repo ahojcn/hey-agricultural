@@ -2,7 +2,6 @@
   <div>
     <Row>
       <Col span="6">
-        <!-- TODO 功能具体实现 -->
         <Card title="管理员" icon="md-person" :padding="0" shadow style="width: 300px;">
           <CellGroup @on-click="clickCell">
             <Cell name="上架新商品" title="上架新商品" label="新增各种商品" to="Add">
@@ -19,6 +18,10 @@
 
             <Cell name="订单查询" title="订单查询" label="查询所有订单状况" to="OrderInfo">
               <Icon type="md-reorder" slot="icon"/>
+            </Cell>
+
+            <Cell name="技术帮扶" title="技术帮扶" label="管理员在此进行在线技术帮扶" to="AdminSupport">
+              <Icon type="ios-build" slot="icon"/>
             </Cell>
           </CellGroup>
         </Card>
