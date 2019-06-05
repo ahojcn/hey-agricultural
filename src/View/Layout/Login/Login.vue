@@ -48,8 +48,8 @@
     data() {
       return {
         userData: {
-          username: '00001',
-          password: '123456',
+          username: 'ahojcn',
+          password: '1Liujingliang',
         },
         loginDataRule: {
           username: [
