@@ -86,7 +86,8 @@
           {
             title: '日期',
             key: 'createTime',
-            align: 'center'
+            align: 'center',
+            width: '200'
           },
           {
             title: '价格',
@@ -99,9 +100,37 @@
             align: 'center'
           },
           {
+            title: '支付状态',
+            key: 'payStatus',
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Tag', {
+                  props: {
+                    color: params.row.payStatus === 0 ? 'red' : 'green'
+                  },
+                }, params.row.payStatus === 0 ? '未付款' : '已付款')
+              ]);
+            }
+          },
+          {
+            title: '订单状态',
+            key: 'orderStatus',
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Tag', {
+                  props: {
+                    color: params.row.payStatus === 0 ? 'red' : 'green'
+                  },
+                }, params.row.payStatus === 0 ? '未完结' : '已完结')
+              ]);
+            }
+          },
+          {
             title: '操作',
             key: 'action',
-            width: 150,
+            width: 180,
             align: 'center',
             render: (h, params) => {
               return h('div', [
@@ -119,6 +148,35 @@
                     }
                   }
                 }, '详情'),
+                h('Button', {
+                  props: {
+                    type: 'success',
+                    size: 'small',
+                  },
+                  style: {
+                    marginRight: '5px',
+                    display: params.row.payStatus === 0 ? '' : 'none' // 没有支付才显示
+                  },
+                  on: {
+                    click: () => {
+                      this.newPay(params.index)
+                    }
+                  }
+                }, '支付'),
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small',
+                  },
+                  style: {
+                    marginRight: '5px',
+                  },
+                  on: {
+                    click: () => {
+                      this.cancelOrder(params.index)
+                    }
+                  }
+                }, '取消'),
               ]);
             }
           }],
@@ -209,17 +267,21 @@
       // 如果已经登录，请求订单信息，如果未登录则不请求
       if (this.isLogin === true) {
         this.$http.post('shopping/list', {}).then(res => {
-          this.shoppingPackage = res.body.data;
-          this.shoppingPackageLength = res.body.data.length;
-          // 处理成表格形式
-          for (let i = 0; i < this.shoppingPackageLength; i++) {
-            let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
-            temp.productName = this.shoppingPackage[i].productInfo.productName;
-            temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
-            temp.productNum = this.shoppingPackage[i].productNum;
-            temp.total = temp.productNum * temp.productPrice;
-            temp.id = this.shoppingPackage[i].productInfo.productId;
-            this.shoppingPackageFormInfo.push(temp);
+          if (res.body.code === 0) {
+            this.shoppingPackage = res.body.data;
+            this.shoppingPackageLength = res.body.data.length;
+            // 处理成表格形式
+            for (let i = 0; i < this.shoppingPackageLength; i++) {
+              let temp = {productName: '', productPrice: 0, productNum: 0, total: 0, id: ''};
+              temp.productName = this.shoppingPackage[i].productInfo.productName;
+              temp.productPrice = this.shoppingPackage[i].productInfo.productPrice;
+              temp.productNum = this.shoppingPackage[i].productNum;
+              temp.total = temp.productNum * temp.productPrice;
+              temp.id = this.shoppingPackage[i].productInfo.productId;
+              this.shoppingPackageFormInfo.push(temp);
+            }
+          } else {
+            this.$Message.warning('购物车空空如也哦~');
           }
         }, err => {
           this.$Loading.error();
@@ -301,6 +363,39 @@
                     价钱：${this.myOrder[i].orderAmount}<br/>
                     状态：${this.myOrder[i].orderStatus === 0 ? '未支付' : '已支付'}<br/>
                     `
+        });
+      },
+      newPay(i) {
+        // 0表示等待支付，1表示已经支付
+        if (this.myOrder[i].payStatus === 1) {
+          this.$Message.success('已支付');
+        } else {
+          this.$Message.success('订单ID' + this.myOrder[i].orderId);
+          this.$Message.success('正在跳转支付...');
+          this.$http.post('pay/affirmPay', {
+            masterOrderId: this.myOrder[i].orderId
+          }).then(resp => {
+            window.location.href = resp.url
+              + '?masterOrderId='
+              + this.myOrder[i].orderId;
+          }, errp => {
+            console.log(errp);
+            this.$Loading.error();
+          })
+        }
+      },
+      cancelOrder(i) {
+        console.log(this.myOrder[i]);
+        this.$http.post('order/cancel', {
+          orderMasterId: this.myOrder[i].orderId
+        }).then(res=>{
+          if (res.body.code === 0) {
+            this.$Message.success(res.body.msg);
+          } else {
+            this.$Message.error(res.body.msg);
+          }
+        },err=>{
+          console.log(err);
         });
       }
     }
