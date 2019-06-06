@@ -361,7 +361,7 @@
                     用户：${this.myOrder[i].buyerId}<br/>
                     时间：${this.myOrder[i].createTime}<br/>
                     价钱：${this.myOrder[i].orderAmount}<br/>
-                    状态：${this.myOrder[i].orderStatus === 0 ? '未支付' : '已支付'}<br/>
+                    状态：${this.myOrder[i].payStatus === 0 ? '未支付' : '已支付'}<br/>
                     `
         });
       },
