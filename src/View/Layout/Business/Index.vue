@@ -19,6 +19,9 @@
         url2: '',
       }
     },
+    beforeCreate() {
+      location.replace('http://ahojcn.natapp1.cc/business/')
+    },
     mounted() {
       this.url1 = 'aaa.html';
       this.url2 = 'http://file.xxx.com/group1/M00/0D/3B/yyyyyyy.html'

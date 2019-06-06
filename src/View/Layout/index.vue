@@ -30,6 +30,9 @@
 
             <MenuItem name="5" to="/Business">
               <Icon type="md-thumbs-up"/>
+              <!--<Button type="text" ghost style="color: aliceblue;" @click="jmpToBussiness">-->
+                <!--<h3>商业合作</h3>-->
+              <!--</Button>-->
               商业合作
             </MenuItem>
           </div>
@@ -143,7 +146,10 @@
         } else {
 
         }
-      }
+      },
+      // jmpToBussiness() {
+      //   location.replace('http://127.0.0.1:7778/business/');
+      // }
     },
   }
 </script>
