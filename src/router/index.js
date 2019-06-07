@@ -8,7 +8,11 @@ import Poultry from '@/View/Layout/Home/Poultry' // 家禽
 
 import SelfCenter from '@/View/Layout/Home/SelfCenter' // 个人中心
 
-import Relaxation from '@/View/Layout/Relaxation' // 休闲娱乐
+import Relaxation from '@/View/Layout/Relaxation/Index' // 休闲娱乐
+import CropsClaim from '@/View/Layout/Relaxation/CropsClaim' // 作物认领
+import SelfPicking from '@/View/Layout/Relaxation/SelfPicking' // 采摘预约
+import Tourism from '@/View/Layout/Relaxation/Tourism' // 旅游度假版块
+import Daily from '@/View/Layout/Relaxation/Daily' // 饮食住宿版块
 
 import Support from '@/View/Layout/Support' // 技术帮扶
 
@@ -87,6 +91,29 @@ export default new Router({
           path: '/Relaxation',
           name: 'Relaxation',
           component: Relaxation,
+          redirect: '/CropsClaim',
+          children: [
+            {
+              path: '/CropsClaim',
+              name: 'CropsClaim',
+              component: CropsClaim
+            },
+            {
+              path: '/SelfPicking',
+              name: 'SelfPicking',
+              component: SelfPicking
+            },
+            {
+              path: '/Tourism',
+              name: 'Tourism',
+              component: Tourism
+            },
+            {
+              path: '/Daily',
+              name: 'Daily',
+              component: Daily
+            }
+          ]
         },
         { // 技术帮扶版块
           path: '/Support',
