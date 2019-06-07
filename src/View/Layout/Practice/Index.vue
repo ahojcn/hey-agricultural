@@ -38,7 +38,7 @@
           </div>
         </Card>
 
-        <div v-for="item in myPractice" :key="item.baseId">
+        <div v-if="myPractice !== []" v-for="item in myPractice" :key="item.baseId">
           <Poptip trigger="hover" word-wrap width="220" :title="item.baseName" :content="item.baseDescription"
                   placement="right">
             <Card style="margin-bottom: 20px">
