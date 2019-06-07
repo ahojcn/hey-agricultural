@@ -104,17 +104,9 @@
         console.log(err);
       });
 
-      // 获取我预约了的实践
-      this.$http.post('practice/showAllPractice', {}).then(res => {
-        if (res.body.code === 0) {
-          this.myPractice = res.body.data;
-        } else {
-          this.$Loading.error();
-        }
-      }, err => {
-        this.$Loading.error();
-        console.log(err);
-      });
+      setInterval(()=>{
+        this.getMyPractice();
+      }, 1000);
 
       this.$Loading.finish();
     },
@@ -136,7 +128,20 @@
         }, err => {
         });
         this.$Loading.finish();
-      }
+      },
+      getMyPractice() {
+        // 获取我预约了的实践
+        this.$http.post('practice/showAllPractice', {}).then(res => {
+          if (res.body.code === 0) {
+            this.myPractice = res.body.data;
+          } else {
+            this.$Loading.error();
+          }
+        }, err => {
+          this.$Loading.error();
+          console.log(err);
+        });
+      },
     },
   }
 </script>
