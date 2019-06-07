@@ -20,12 +20,16 @@
               <Icon type="md-reorder" slot="icon"/>
             </Cell>
 
-            <Cell name="技术帮扶" title="技术帮扶" label="管理员在此进行在线技术帮扶" to="AdminSupport">
+            <Cell name="技术帮扶" title="技术帮扶" label="进行在线技术帮扶" to="AdminSupport">
               <Icon type="ios-build" slot="icon"/>
             </Cell>
 
-            <Cell name="实践基地" title="实践基地" label="在此进行实践基地内容管理" to="AdminPractice">
+            <Cell name="实践基地" title="实践基地" label="实践基地内容管理" to="AdminPractice">
               <Icon type="md-egg" slot="icon"/>
+            </Cell>
+
+            <Cell name="植物认领" title="植物认领" label="植物认领内容管理" to="AdminCrops">
+              <Icon type="md-flower" slot="icon"/>
             </Cell>
           </CellGroup>
         </Card>

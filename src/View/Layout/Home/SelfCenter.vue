@@ -18,7 +18,7 @@
 
     <Collapse accordion>
       <Panel name="我的订单">
-        所有订单
+        我的订单
         <div slot="content">
           <Card shadow>
             <Table stripe ref="selection" height="500" :columns="myOrderFormTitle"
@@ -34,7 +34,7 @@
         </div>
       </Panel>
       <Panel name="我的购物车">
-        购物车
+        我的购物车
         <div slot="content">
           <Card shadow>
             <Table stripe ref="selection" height="500" :columns="shoppingPackageFormTitle"
@@ -50,7 +50,7 @@
         </div>
       </Panel>
       <Panel name="预约的实践">
-        预约实践
+        预约的实践
         <div slot="content" v-if="myPractice !== []" v-for="item in myPractice" :key="item.baseId">
           <Poptip trigger="hover" word-wrap width="220" :title="item.baseName" :content="item.baseDescription"
                   placement="right">
@@ -77,7 +77,7 @@
         </div>
       </Panel>
       <Panel name="领养的植物">
-        植物领养
+        领养的植物
         <div slot="content">
           <div v-for="(l, val, num) in myClaimCrops" :key="l.productId">
             <Tooltip theme="light" max-width="200">
