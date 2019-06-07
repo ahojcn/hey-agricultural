@@ -9,7 +9,7 @@
         </Breadcrumb>
       </Col>
       <Col span="12">
-        <Input style="padding-right: 70px" v-model="searchKeywords" search enter-button placeholder="查找..." autofocus
+        <Input style="padding-right: 70px" v-model="searchKeywords" search enter-button placeholder="查找想要购买的 ..." autofocus
                autocomplete/>
       </Col>
     </div>

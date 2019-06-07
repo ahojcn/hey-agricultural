@@ -3,73 +3,110 @@
     <Card shadow>
       <p slot="title">个人中心</p>
       <div>
-        <Col span="8">
-          ID：{{userData.userId}}<br/>
-          用户名：{{userData.userName}}<br/>
-          手机号：{{userData.userPhone}}
-        </Col>
-        <Col span="6">
-          <img src="https://i.loli.net/2017/08/21/599a521472424.jpg" alt="touxiang" style="width: 50%">
-        </Col>
-        <Col span="10">
-          <Upload
-            multiple
-            type="drag"
-            action="https://sm.ms/api/upload"
-            style="width: 300px"
-            :multiple="false"
-            :data="uploadData">
-            <div style="padding: 20px 0;">
-              <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-              <p>修改头像，拖拽或选择上传！</p>
-            </div>
-          </Upload>
-        </Col>
+        <Row>
+          <Col span="3">
+            <img :src="userData.userIcon" alt="touxiang" style="width: 90%">
+          </Col>
+          <Col span="8">
+            账号：{{userData.userId}}<br/>
+            用户名：{{userData.userName}}<br/>
+            手机号：{{userData.userPhone}}
+          </Col>
+        </Row>
       </div>
-      <p>
-        修改用户信息<br/>修改用户信息<br/>修改用户信息<br/>
-      </p>
     </Card>
 
-    <Divider/>
-    <!-- 我的所有订单 -->
-    <div>
-      <Card shadow>
-        <p slot="title">我的订单</p>
-        <Table stripe ref="selection" height="500" :columns="myOrderFormTitle"
-               :data="myOrder"></Table>
-        <br/>
-        <Button type="primary" @click="handleSelectAll(true)">全选</Button>
-        <Button type="primary" @click="handleSelectAll(false)">全不选</Button>
-        <Button type="primary" @click="exportData(1)">
-          <Icon type="ios-download-outline"></Icon>
-          导出订单数据
-        </Button>
-      </Card>
-    </div>
+    <Collapse accordion>
+      <Panel name="所有订单">
+        所有订单
+        <div slot="content">
+          <Card shadow>
+            <Table stripe ref="selection" height="500" :columns="myOrderFormTitle"
+                   :data="myOrder"></Table>
+            <br/>
+            <Button type="primary" @click="handleSelectAll(true)">全选</Button>
+            <Button type="primary" @click="handleSelectAll(false)">全不选</Button>
+            <Button type="primary" @click="exportData(1)">
+              <Icon type="ios-download-outline"></Icon>
+              导出订单数据
+            </Button>
+          </Card>
+        </div>
+      </Panel>
+      <Panel name="购物车">
+        购物车
+        <div slot="content">
+          <Card shadow>
+            <Table stripe ref="selection" height="500" :columns="shoppingPackageFormTitle"
+                   :data="shoppingPackageFormInfo"></Table>
+            <br/>
+            <Button type="primary" @click="handleSelectAll(true)">全选</Button>
+            <Button type="primary" @click="handleSelectAll(false)">全不选</Button>
+            <Button type="primary" @click="exportData(1)">
+              <Icon type="ios-download-outline"></Icon>
+              导出购物车数据
+            </Button>
+          </Card>
+        </div>
+      </Panel>
+      <Panel name="预约实践">
+        预约实践
+        <div slot="content" v-if="myPractice !== []" v-for="item in myPractice" :key="item.baseId">
+          <Poptip trigger="hover" word-wrap width="220" :title="item.baseName" :content="item.baseDescription"
+                  placement="right">
+            <Card style="margin-bottom: 20px">
+              <div>
+                <Row>
+                  <Col span="8">
+                    <h4>
+                      实践基地编号：{{item.baseId}}<br/>
+                      地点：{{item.baseAddress}}<br/>
+                      开始时间：{{new Date(item.baseStart).toLocaleDateString()}}<br/>
+                      结束时间：{{new Date(item.baseEnd).toLocaleDateString()}}<br/>
+                      实践人数：{{item.baseJoin}}<br/>
+                      剩余人数：{{item.baseMaxpeople - item.baseJoin}}
+                    </h4>
+                  </Col>
+                  <Col span="16">
+                    <img :src="item.baseIcon" alt="实践基地图片" style="width: 100%">
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Poptip>
+        </div>
+      </Panel>
+      <Panel name="植物领养">
+        植物领养
+        <div slot="content">
+          <div v-for="(l, val, num) in myClaimCrops" :key="l.productId">
+            <Tooltip theme="light" max-width="200">
+              <!-- 文字提示 -->
+              <div slot="content">
+                {{l.botanyDescription}}
+              </div>
 
-    <Divider/>
-    <!-- 购物车 -->
-    <div>
-      <Card shadow>
-        <p slot="title">购物车</p>
-        <Table stripe ref="selection" height="500" :columns="shoppingPackageFormTitle"
-               :data="shoppingPackageFormInfo"></Table>
-        <br/>
-        <Button type="primary" @click="handleSelectAll(true)">全选</Button>
-        <Button type="primary" @click="handleSelectAll(false)">全不选</Button>
-        <Button type="primary" @click="exportData(1)">
-          <Icon type="ios-download-outline"></Icon>
-          导出购物车数据
-        </Button>
-      </Card>
-    </div>
+              <!-- 详细信息 -->
+              <Card>
+                <img :src="l.botanyIcon" :alt="l.botanyName" style="width: 200px"><br/>
+                <Tag color="primary">{{l.botanyName}}</Tag>
+                <Tag color="volcano">{{'剩余' + l.botanyNum}}</Tag>
+              </Card>
+            </Tooltip>
+          </div>
+        </div>
+      </Panel>
+    </Collapse>
+
   </div>
 </template>
 
 <script>
+  import Mallki from "../../../components/Mallki";
+
   export default {
     name: "SelfCenter",
+    components: {Mallki},
     data() {
       return {
         userData: {},
@@ -243,7 +280,12 @@
             }
           }
         ],
-        shoppingPackageFormInfo: [] // 购物车表格信息
+        shoppingPackageFormInfo: [], // 购物车表格信息
+
+        // 我预约的实践
+        myPractice: [],
+        // 我领养的植物列表
+        myClaimCrops: [],
       }
     },
     mounted() {
@@ -312,6 +354,13 @@
 
         this.$Loading.finish();
       }
+
+      // 获取我预约的实践
+      this.getMyPractice();
+      // 获取我领养的植物
+      this.getMyClaimCrops();
+
+      this.$Loading.finish();
     },
     methods: {
       handleCellClick(item) {
@@ -388,16 +437,44 @@
         console.log(this.myOrder[i]);
         this.$http.post('order/cancel', {
           orderMasterId: this.myOrder[i].orderId
-        }).then(res=>{
+        }).then(res => {
           if (res.body.code === 0) {
             this.$Message.success(res.body.msg);
           } else {
             this.$Message.error(res.body.msg);
           }
-        },err=>{
+        }, err => {
           console.log(err);
         });
-      }
+      },
+      // 获取预约的实践
+      getMyPractice() {
+        // 获取我预约了的实践
+        this.$http.post('practice/showAllPractice', {}).then(res => {
+          if (res.body.code === 0) {
+            this.myPractice = res.body.data;
+          } else {
+            this.$Loading.error();
+          }
+        }, err => {
+          this.$Loading.error();
+          console.log(err);
+        });
+      },
+      // 获取所有我领养的植物
+      getMyClaimCrops() {
+        this.$http.post('botany/showMyAll', {}).then(res => {
+          if (res.body.code === 0) {
+            this.myClaimCrops = res.body.data;
+          } else {
+            this.$Loading.error();
+            this.$Message.error(res.body.msg);
+          }
+        }, err => {
+          this.$Loading.error();
+          console.log(err);
+        })
+      },
     }
   }
 </script>
