@@ -106,7 +106,6 @@
 
       // 获取我预约了的实践
       this.$http.post('practice/showAllPractice', {}).then(res => {
-        console.log(res);
         if (res.body.code === 0) {
           this.myPractice = res.body.data;
         } else {
