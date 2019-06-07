@@ -32,8 +32,7 @@
           </Button>
         </router-link>
       </FormItem>
-      userId：00001 password：123456<br/>
-      userId：00000 password：123456<br/>
+      adminId：00000 password：123456<br/>
     </Form>
   </div>
 </template>

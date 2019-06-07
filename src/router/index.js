@@ -27,6 +27,7 @@ import Del from '@/View/Layout/Console/Del' // 删除商品
 import Modify from '@/View/Layout/Console/Modify' // 修改商品
 import OrderInfo from '@/View/Layout/Console/OrderInfo' // 查询订单状况
 import AdminSupport from '@/View/Layout/Console/Support' // 在线技术帮扶
+import AdminPractice from '@/View/Layout/Console/Practice' // 实践信息管理
 
 import pay from '@/View/Layout/pay' // pay success
 
@@ -137,6 +138,11 @@ export default new Router({
               path: '/AdminSupport',
               name: 'AdminSupport',
               component: AdminSupport
+            },
+            {
+              path: '/AdminPractice',
+              name: 'AdminPractice',
+              component: AdminPractice
             }
           ],
         }
