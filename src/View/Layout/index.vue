@@ -30,11 +30,14 @@
 
             <MenuItem name="5" to="/Business">
               <Icon type="md-thumbs-up"/>
-              <!--<Button type="text" ghost style="color: aliceblue;" @click="jmpToBussiness">-->
-                <!--<h3>商业合作</h3>-->
-              <!--</Button>-->
               商业合作
             </MenuItem>
+
+            <MenuItem name="5" to="/Downloads">
+              <Icon type="ios-cloud-download" />
+              客户端下载
+            </MenuItem>
+
           </div>
 
           <!-- 右上角的个人中心 -->

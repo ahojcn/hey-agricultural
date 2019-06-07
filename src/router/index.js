@@ -36,6 +36,8 @@ import AdminCrops from '@/View/Layout/Console/Crops' // 植物认领相关操作
 
 import pay from '@/View/Layout/pay' // pay success
 
+import Downloads from '@/View/Layout/Downloads/Downloads' // 下载页面
+
 Vue.use(Router);
 
 export default new Router({
@@ -135,6 +137,11 @@ export default new Router({
           path: '/SelfCenter',
           name: 'SelfCenter',
           component: SelfCenter
+        },
+        {
+          path: '/Downloads',
+          name: 'Downloads',
+          component: Downloads
         },
         { // 管理控制台
           path: '/Console',
