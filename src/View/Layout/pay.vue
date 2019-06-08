@@ -1,12 +1,22 @@
 <template>
   <div>
-    <h1>pay success</h1>
   </div>
 </template>
 
 <script>
   export default {
-    name: "pay"
+    name: "pay",
+    data() {
+      return {}
+    },
+    mounted() {
+      this.$Loading.start();
+      this.$Message.success('支付成功！');
+      setInterval(() => {
+        this.$router.push('/');
+      }, 1000);
+      this.$Loading.finish();
+    }
   }
 </script>
 
