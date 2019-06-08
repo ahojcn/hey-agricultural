@@ -79,21 +79,53 @@
       <Panel name="领养的植物">
         领养的植物
         <div slot="content">
-          <div v-for="(l, val, num) in myClaimCrops" :key="l.productId">
-            <Tooltip theme="light" max-width="200">
-              <!-- 文字提示 -->
-              <div slot="content">
-                {{l.botanyDescription}}
-              </div>
+          <Row>
+            <div v-for="(l, val, num) in myClaimCrops" :key="l.productId">
+              <Col span="8">
+                <Tooltip theme="light" max-width="200">
+                  <!-- 文字提示 -->
+                  <div slot="content">
+                    {{l.botanyDescription}}
+                  </div>
 
-              <!-- 详细信息 -->
-              <Card>
-                <img :src="l.botanyIcon" :alt="l.botanyName" style="width: 200px"><br/>
-                <Tag color="primary">{{l.botanyName}}</Tag>
-                <Tag color="volcano">{{'剩余' + l.botanyNum}}</Tag>
-              </Card>
-            </Tooltip>
-          </div>
+                  <!-- 详细信息 -->
+                  <Card>
+                    <img :src="l.botanyIcon" :alt="l.botanyName" style="width: 200px"><br/>
+                    <Tag color="primary">{{l.botanyName}}</Tag>
+                    <Tag color="volcano">{{'剩余' + l.botanyNum}}</Tag>
+                  </Card>
+                </Tooltip>
+              </Col>
+            </div>
+          </Row>
+        </div>
+      </Panel>
+      <Panel name="预约的采摘">
+        预约的采摘
+        <div slot="content">
+          <Row>
+            <div v-for="l in myPockList" :key="l.pickId">
+              <Col span="8">
+                <Tooltip theme="light" max-width="200">
+                  <!-- 文字提示 -->
+                  <div slot="content">
+                    {{l.productDescription}}
+                  </div>
+
+                  <!-- 详细信息 -->
+                  <Card>
+                    <img :src="l.productIcon" :alt="l.productName" style="width: 200px"><br/>
+                    <Tag color="primary">{{l.productName}}</Tag>
+                    <Tag color="volcano">{{'价格' + l.productPrice}}</Tag>
+                    <br/>
+                    <Tag color="pink">{{'用户' + l.pickUser}}</Tag>
+                    <Tag color="green">{{'时间' + new Date(l.pickTime).toLocaleDateString()}}</Tag>
+                    <Button type="warning" @click="cancelMyPick(l)">取消预约</Button>
+                  </Card>
+                </Tooltip>
+              </Col>
+            </div>
+          </Row>
         </div>
       </Panel>
     </Collapse>
@@ -286,6 +318,8 @@
         myPractice: [],
         // 我领养的植物列表
         myClaimCrops: [],
+        // 我预约的采摘list
+        myPockList: [],
       }
     },
     mounted() {
@@ -351,6 +385,9 @@
         }, err => {
           console.log(err);
         });
+
+        // 获取我的采摘预约信息
+        this.getMyPock();
 
         this.$Loading.finish();
       }
@@ -474,6 +511,38 @@
           this.$Loading.error();
           console.log(err);
         })
+      },
+      // 获取我预约的采摘信息
+      getMyPock() {
+        this.$http.post('pick/findMyPick', {}).then(res => {
+          if (res.body.code === 0) {
+            this.myPockList = res.body.data;
+          } else {
+            this.$Loading.error();
+            this.$Message.error(res.body.msg);
+          }
+        }, err => {
+          this.$Loading.error();
+          this.$Message.error('服务器异常');
+          console.log(err);
+        });
+      },
+      // 点击取消预约触发事件
+      cancelMyPick(l) { // TODO : bug here
+        this.$http.post('pick/cancelMyPick', {
+          pickId: l.pickId
+        }).then(res => {
+          if (res.body.code === 0) {
+            this.$Message.success(res.body.msg);
+          } else {
+            this.$Message.error(res.body.msg);
+            this.$Loading.error();
+          }
+        }, err => {
+          console.log(err);
+          this.$Message.error('服务器异常');
+          this.$Loading.error();
+        });
       },
     }
   }
