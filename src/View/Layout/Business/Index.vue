@@ -20,7 +20,7 @@
       }
     },
     beforeCreate() {
-      location.replace('http://ahojcn.natapp1.cc/business/')
+      location.replace('http://ahojcn.natapp1.cc/business/2019/06/06/%E5%90%88%E4%BD%9C%E6%A1%88%E4%BE%8B/')
     },
     mounted() {
       this.url1 = 'aaa.html';

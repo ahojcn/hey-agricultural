@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1>
-      饮食住宿版块
-    </h1>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Daily"
+    name: "Daily",
+    beforeCreate() {
+      location.replace('http://ahojcn.natapp1.cc/business/2019/06/08/%E9%A5%AE%E9%A3%9F%E4%BD%8F%E5%AE%BF/')
+    },
   }
 </script>
 
