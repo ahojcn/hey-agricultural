@@ -31,6 +31,10 @@
             <Cell name="植物认领" title="植物认领" label="植物认领内容管理" to="AdminCrops">
               <Icon type="md-flower" slot="icon"/>
             </Cell>
+
+            <Cell name="采摘预约" title="采摘预约" label="采摘预约内容管理" to="AdminPick">
+              <Icon type="logo-pinterest" slot="icon"/>
+            </Cell>
           </CellGroup>
         </Card>
       </Col>

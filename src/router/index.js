@@ -33,6 +33,7 @@ import OrderInfo from '@/View/Layout/Console/OrderInfo' // 查询订单状况
 import AdminSupport from '@/View/Layout/Console/Support' // 在线技术帮扶
 import AdminPractice from '@/View/Layout/Console/Practice' // 实践信息管理
 import AdminCrops from '@/View/Layout/Console/Crops' // 植物认领相关操作
+import AdminPick from '@/View/Layout/Console/AdminPick' // 采摘预约管理
 
 import pay from '@/View/Layout/pay' // pay success
 
@@ -183,6 +184,11 @@ export default new Router({
               path: '/AdminCrops',
               name: 'AdminCrops',
               component: AdminCrops
+            },
+            {
+              path: '/AdminPick',
+              name: 'AdminPick',
+              component: AdminPick
             }
           ],
         }
