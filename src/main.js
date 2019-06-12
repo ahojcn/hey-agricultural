@@ -26,14 +26,12 @@ import 'animate.css'
 import VueResource from 'vue-resource'
 
 Vue.use(VueResource);
-// 虚拟机
-// Vue.http.options.root = 'http://10.211.55.19:8080';
 // 本机
 // Vue.http.options.root = 'http://localhost:8080';
 // 生产
-// Vue.http.options.root = 'http://106.12.202.93:8080';
+Vue.http.options.root = 'http://106.12.202.93:8080';
 // tim开发环境
-Vue.http.options.root = 'http://tim.natapp1.cc';
+// Vue.http.options.root = 'http://tim.natapp1.cc';
 Vue.http.interceptors.push(function (request, next) {//拦截器
 // 跨域携带cookie
   request.credentials = true;
