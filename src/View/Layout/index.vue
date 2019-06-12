@@ -116,6 +116,9 @@
     mounted() {
       this.$Loading.start(); // 进度条开始
 
+      // 清除定时器，这个bug @Tim
+      clearInterval();
+
       this.animate = true;
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
