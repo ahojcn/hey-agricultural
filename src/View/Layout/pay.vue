@@ -12,9 +12,7 @@
     mounted() {
       this.$Loading.start();
       this.$Message.success('支付成功！');
-      setInterval(() => {
-        this.$router.push('/');
-      }, 1000);
+      this.$router.push('/');
       this.$Loading.finish();
     }
   }

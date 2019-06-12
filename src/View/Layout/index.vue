@@ -65,7 +65,7 @@
             <!-- 已经登录 -->
             <Dropdown v-show="isLogin === true" @on-click="handleClick">
               <a href="javascript:void(0)">
-                <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
+                <Avatar :src="userData.userIcon"/>
               </a>
               <DropdownMenu slot="list">
                 <router-link to="/SelfCenter">
@@ -110,18 +110,21 @@
         animate: false, // 动画控制
         isLogin: false, // 是否已登录
         isAdmin: false, // 是否管理员
-        userData: null, // 用户信息
+        userData: {}, // 用户信息
       }
     },
     mounted() {
       this.$Loading.start(); // 进度条开始
 
-      // 清除定时器，这个bug @Tim
-      clearInterval();
-
       this.animate = true;
       this.isLogin = JSON.parse(localStorage.getItem('isLogin'));
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+      this.userData = JSON.parse(localStorage.getItem('userData'));
+      if (this.userData === null) {
+        this.userData = {
+          userIcon: 'https://i.loli.net/2017/08/21/599a521472424.jpg'
+        };
+      }
 
       if (localStorage.getItem('userData') === null) {
         localStorage.setItem('isLogin', false);

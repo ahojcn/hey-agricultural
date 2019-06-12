@@ -12,6 +12,12 @@
             用户名：{{userData.userName}}<br/>
             手机号：{{userData.userPhone}}
           </Col>
+          <Col span="12">
+            <input type="file" ref="uploadImg" style="width: 130px"></input>
+            <Button type="text" @click="uploadProductIcon">
+              <Mallki text="点击上传"></Mallki>
+            </Button>
+          </Col>
         </Row>
       </div>
     </Card>
@@ -544,6 +550,23 @@
           this.$Loading.error();
         });
       },
+
+      // 上传头像
+      uploadProductIcon() {
+        // console.log(this.$refs.uploadImg.files[0])
+        this.$Loading.start();
+        if (this.$refs.uploadImg.files.length === 0) {
+          this.$Message.error('请选择一个图片文件');
+          this.$Loading.error();
+          return;
+        }
+
+        uploadImg(this.$refs.uploadImg.files[0]).then(res => {
+          // console.log(res.data.url);
+          this.userData.userIcon = res.data.url;
+        });
+        this.$Loading.finish();
+      }
     }
   }
 </script>
